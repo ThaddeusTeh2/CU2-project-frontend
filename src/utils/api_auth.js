@@ -3,6 +3,7 @@ import { toast } from "sonner";
 
 import { API_URL } from "../constants";
 
+//login
 export const login = async (email, password) => {
   try {
     const response = await axios.post(API_URL + "/auth/login", {
@@ -15,6 +16,7 @@ export const login = async (email, password) => {
   }
 };
 
+//signup
 export const signup = async (name, email, password) => {
   try {
     const response = await axios.post(API_URL + "/auth/signup", {
@@ -38,7 +40,7 @@ export const isUserLoggedIn = (cookies) => {
   return getCurrentUser(cookies) ? true : false;
 };
 
-//he admin?
+//he admin??
 export const isAdmin = (cookies) => {
   const currentUser = getCurrentUser(cookies);
   return currentUser && currentUser.role;
