@@ -1,9 +1,19 @@
 # React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+TODO
 
-Currently, two official plugins are available:
+-map the data from the api to the views
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+-create states and functions to change those states, pass the changed states to the backend to update db
+
+then we're basically done with CRUD, multi level user auth start
+
+-session implementation so that the site knows who we are
+
+-go back and shove the auth middleware into the controllers so i dont get hacked live
+
+-back to the frontend to do some if-else statements to make sure users are not supposed to see admin shi,
+
+finally make the website responsive
+
 # CU2-project-frontend
