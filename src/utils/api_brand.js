@@ -1,6 +1,6 @@
 import axios from "axios";
 import { toast } from "sonner";
-import { API_URL } from "../constants";
+import { API_URL } from "../../constants";
 
 //get all brands
 export const getBrands = async (sortType) => {

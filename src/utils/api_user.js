@@ -1,6 +1,6 @@
 import axios from "axios";
 import { toast } from "sonner";
-import { API_URL } from "../constants";
+import { API_URL } from "../../constants";
 
 export const getAllUsers = async (sortType = "latest") => {
   try {

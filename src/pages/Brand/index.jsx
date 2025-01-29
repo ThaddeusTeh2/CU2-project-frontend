@@ -1,3 +1,8 @@
+import { useEffect, useState } from "react";
+//import api
+import { getBrands } from "@/utils/api_brand";
+
+//shadcn imports
 import {
   Card,
   CardContent,
@@ -15,6 +20,17 @@ import {
 import { Input } from "@/components/ui/input";
 
 export default function Brand() {
+  const [brands, setBrands] = useState([]);
+
+  useEffect(() => {
+    const fetchBrands = async () => {
+      const data = await getBrands();
+      setBrands(data);
+    };
+
+    fetchBrands();
+  }, []);
+
   return (
     <>
       <div className="flex justify-center">
@@ -40,20 +56,29 @@ export default function Brand() {
                 </DropdownMenu>
               </div>
             </div>
-            <div>
-              <Card className="flex flex-row place-content-between">
-                <CardHeader>
-                  <CardTitle>Toyota</CardTitle>
-                </CardHeader>
-                <CardContent className="justify-center content-center">
-                  <Button
-                    className="justify-center content-center"
-                    variant="outline"
+            <div className="grid gap-4">
+              {brands.length > 0 ? (
+                brands.map((brand) => (
+                  <Card
+                    key={brand.id}
+                    className="flex flex-row place-content-between"
                   >
-                    View
-                  </Button>
-                </CardContent>
-              </Card>
+                    <CardHeader>
+                      <CardTitle>{brand.name}</CardTitle>
+                    </CardHeader>
+                    <CardContent className="justify-center content-center">
+                      <Button
+                        className="justify-center content-center"
+                        variant="outline"
+                      >
+                        View
+                      </Button>
+                    </CardContent>
+                  </Card>
+                ))
+              ) : (
+                <p>No brands found.</p>
+              )}
             </div>
           </div>
         </div>
