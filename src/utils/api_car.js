@@ -3,12 +3,31 @@ import { toast } from "sonner";
 import { API_URL } from "../../constants";
 
 //get all
-export const getCars = async () => {
+export const getCars = async (type, brand, sortType) => {
   try {
-    const response = await axios.post(API_URL + "/car", {
-      type,
-      brand,
-      sortType,
+    const response = await axios.get(API_URL + "/car", {
+      params: {
+        type,
+        brand,
+        sortType: sortType === "latest" ? "createdAt" : sortType,
+        // 'latest' --> 'createdAt'
+        // 'name' --> 'name'
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//get all admin
+export const getCarsAdmin = async (sortType) => {
+  try {
+    const response = await axios.get(API_URL + "/car/admin", {
+      params: {
+        sortType: sortType === "latest" ? "createdAt" : sortType,
+      },
     });
     return response.data;
   } catch (error) {
@@ -27,9 +46,15 @@ export const getCar = async (id) => {
 };
 
 //add
-export const addCar = async () => {
+export const addCar = async (carData) => {
   try {
-    const response = await axios.post(API_URL + "/car", carData);
+    const response = await axios.post(API_URL + "/car", {
+      name: carData.name,
+      description: carData.description,
+      type: carData.type,
+      brand: carData.brand,
+      image: carData.image,
+    });
     toast.success("car added successfully");
     return response.data;
   } catch (error) {
@@ -38,9 +63,15 @@ export const addCar = async () => {
 };
 
 //edit
-export const editCar = async (id) => {
+export const editCar = async (id, carData) => {
   try {
-    const response = await axios.put(API_URL + "/car/" + id, carData);
+    const response = await axios.put(API_URL + "/car/" + id, {
+      name: carData.name,
+      description: carData.description,
+      type: carData.type,
+      brand: carData.brand,
+      image: carData.image,
+    });
     toast.success("car updated successfully");
     return response.data;
   } catch (error) {

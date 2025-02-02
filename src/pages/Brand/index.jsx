@@ -1,15 +1,11 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+
 //import api
 import { getBrands } from "@/utils/api_brand";
 
 //shadcn imports
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -23,12 +19,9 @@ export default function Brand() {
   const [brands, setBrands] = useState([]);
 
   useEffect(() => {
-    const fetchBrands = async () => {
-      const data = await getBrands();
+    getBrands().then((data) => {
       setBrands(data);
-    };
-
-    fetchBrands();
+    });
   }, []);
 
   return (
@@ -69,9 +62,11 @@ export default function Brand() {
                     <CardContent className="justify-center content-center">
                       <Button
                         className="justify-center content-center"
+                        asChild
                         variant="outline"
+                        onClick={() => localStorage.setItem("brand", brand._id)}
                       >
-                        View
+                        <Link to="/type">View</Link>
                       </Button>
                     </CardContent>
                   </Card>

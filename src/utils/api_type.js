@@ -25,7 +25,9 @@ export const getType = async (id) => {
 //add
 export const addType = async (name) => {
   try {
-    const response = await axios.post(API_URL + "/type", name);
+    const response = await axios.post(API_URL + "/type", {
+      name: name,
+    });
     toast.success("type added successfully");
     return response.data;
   } catch (error) {
@@ -36,7 +38,9 @@ export const addType = async (name) => {
 //edit
 export const editType = async (id, name) => {
   try {
-    const response = await axios.put(API_URL + "/type/" + id, name);
+    const response = await axios.put(API_URL + "/type/" + id, {
+      name: name,
+    });
     toast.success("Type updated successfully");
     return response.data;
   } catch (error) {

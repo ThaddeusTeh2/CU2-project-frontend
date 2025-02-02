@@ -1,3 +1,9 @@
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+
+//import api
+import { getCars } from "@/utils/api_car";
+
 import {
   Card,
   CardContent,
@@ -15,6 +21,18 @@ import {
 import { Input } from "@/components/ui/input";
 
 export default function List() {
+  const [cars, setCars] = useState([]);
+
+  useEffect(() => {
+    const brandId = localStorage.getItem("brand");
+    const typeId = localStorage.getItem("type");
+
+    getCars(typeId, brandId, "latest").then((data) => {
+      console.log(data);
+      setCars(data);
+    });
+  }, []);
+
   return (
     <>
       <div className="flex justify-center">
@@ -25,8 +43,8 @@ export default function List() {
             </div>
             <div className="mb-5 flex place-content-between">
               <div className="flex w-full max-w-sm items-center space-x-2">
-                <Input type="text" placeholder="Search" />
-                <Button type="submit">Go</Button>
+                <Input car="text" placeholder="Search" />
+                <Button car="submit">Go</Button>
               </div>
               <div>
                 <DropdownMenu>
@@ -40,21 +58,34 @@ export default function List() {
                 </DropdownMenu>
               </div>
             </div>
-            <div>
-              <Card className="flex flex-row place-content-between">
-                <CardHeader>
-                  <CardTitle>Car Name</CardTitle>
-                  <CardDescription>Car Description</CardDescription>
-                </CardHeader>
-                <CardContent className="justify-center content-center">
-                  <Button
-                    className="justify-center content-center"
-                    variant="outline"
+            <div className="grid gap-4">
+              {cars.length > 0 ? (
+                cars.map((car) => (
+                  <Card
+                    key={car._id}
+                    className="flex flex-row place-content-between"
                   >
-                    View
-                  </Button>
-                </CardContent>
-              </Card>
+                    <CardHeader>
+                      <CardTitle>{car.name}</CardTitle>
+                      <CardDescription>{car.description}</CardDescription>
+                    </CardHeader>
+                    <CardContent className="justify-center content-center">
+                      <Button
+                        asChild
+                        className="justify-center content-center"
+                        variant="outline"
+                        onClick={() => {
+                          localStorage.setItem("car", car._id);
+                        }}
+                      >
+                        <Link to="/car">View</Link>
+                      </Button>
+                    </CardContent>
+                  </Card>
+                ))
+              ) : (
+                <p>No cars found.</p>
+              )}
             </div>
           </div>
         </div>

@@ -1,14 +1,9 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 //import api
 import { getTypes } from "@/utils/api_type";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -22,12 +17,9 @@ export default function Type() {
   const [types, setTypes] = useState([]);
 
   useEffect(() => {
-    const fetchTypes = async () => {
-      const data = await getTypes();
+    getTypes().then((data) => {
       setTypes(data);
-    };
-
-    fetchTypes();
+    });
   }, []);
 
   return (
@@ -68,9 +60,11 @@ export default function Type() {
                     <CardContent className="justify-center content-center">
                       <Button
                         className="justify-center content-center"
+                        asChild
                         variant="outline"
+                        onClick={() => localStorage.setItem("type", type._id)}
                       >
-                        View
+                        <Link to="/list">View</Link>
                       </Button>
                     </CardContent>
                   </Card>

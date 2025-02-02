@@ -25,7 +25,9 @@ export const getBrand = async (id) => {
 //add brand
 export const addBrand = async (name) => {
   try {
-    const response = await axios.post(API_URL + "/brand/", +name);
+    const response = await axios.post(API_URL + "/brand/", {
+      name: name,
+    });
     toast.success("brand added successfully");
     return response.data;
   } catch (error) {
@@ -36,7 +38,9 @@ export const addBrand = async (name) => {
 //edit brand
 export const editBrand = async (id, name) => {
   try {
-    const response = await axios.put(API_URL + "/brand/" + id, name);
+    const response = await axios.put(API_URL + "/brand/" + id, {
+      name: name,
+    });
     toast.success("brand updated successfully");
     return response.data;
   } catch (error) {
@@ -47,7 +51,7 @@ export const editBrand = async (id, name) => {
 //delete brand
 export const deleteBrand = async (id) => {
   try {
-    const response = await axios.delete((API_URL = "/brand/" + id));
+    const response = await axios.delete(API_URL + "/brand/" + id);
     toast.success("brand deleted successfully");
     return response.data;
   } catch (error) {

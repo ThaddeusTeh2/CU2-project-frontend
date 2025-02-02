@@ -1,20 +1,71 @@
+import { useEffect, useState } from "react";
+
+//APIs
+import { getTypes } from "@/utils/api_type";
+import { getBrands } from "@/utils/api_brand";
+import { getCarsAdmin } from "@/utils/api_car";
+import { getAllUsers } from "@/utils/api_user";
+import { getComments } from "@/utils/api_comment";
+
 import Header from "@/components/Header";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
+import Section from "@/components/Section";
 
 export default function Dashboard() {
+  //states
+  const [types, setTypes] = useState([]);
+  const [brands, setBrands] = useState([]);
+  const [cars, setCars] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [comments, setComments] = useState([]);
+
+  const [change, setChange] = useState(false);
+
+  //get all types
+  useEffect(() => {
+    getTypes()
+      .then((data) => setTypes(data))
+      .catch((error) => console.error(error));
+  }, [change]);
+
+  //get all brands
+  useEffect(() => {
+    getBrands()
+      .then((data) => setBrands(data))
+      .catch((error) => console.error(error));
+  }, [change]);
+
+  //get all cars
+  useEffect(() => {
+    getCarsAdmin()
+      .then((data) => setCars(data))
+      .catch((error) => console.error(error));
+  }, [change]);
+
+  //get all users
+  useEffect(() => {
+    getAllUsers()
+      .then((data) => setUsers(data))
+      .catch((error) => console.error(error));
+  }, [change]);
+
+  //get all comments
+  useEffect(() => {
+    if (cars.length > 0) {
+      getComments(cars[0].id)
+        .then((data) => setComments(data))
+        .catch((error) => console.error(error));
+    }
+  }, [cars]);
+
+  //TODO kill myself
+
+  //refreshes page upon change
+  const handleChange = () => {
+    setChange(!change);
+  };
+
+  //all of the data being mapped comes from GET apis being passed as props down to these components (see 'Section' component)
+
   return (
     <>
       <div className="px-5 flex flex-col items-center justify-center">
@@ -23,244 +74,45 @@ export default function Dashboard() {
       </div>
 
       <div className="px-10">
-        {/* manage car body types */}
-        <div className="grid grid-rows-3">
-          <div className="flex flex-row place-content-between">
-            <div className="flex flex-row">
-              <p className="text-2xl mx-2"> All Car Types</p>
-              <Button
-                className="justify-center content-center text-white"
-                variant="contained"
-              >
-                +
-              </Button>
-            </div>
-            <div>
-              <DropdownMenu>
-                <DropdownMenuTrigger className="text-white">
-                  Filter
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem>Name</DropdownMenuItem>
-                  <DropdownMenuItem>Recently added</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </div>
-          <div>
-            <Card className="flex flex-row place-content-between">
-              <CardHeader>
-                <CardTitle>Coupes</CardTitle>
-              </CardHeader>
-              <CardContent className="justify-center content-center">
-                <Button
-                  className="justify-center content-center mx-2"
-                  variant="outline"
-                >
-                  Edit
-                </Button>
-                <Button
-                  className="justify-center content-center"
-                  variant="outline"
-                >
-                  Delete
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
+        {/* types */}
+        <Section
+          title="All Car Types"
+          data={types}
+          type="type"
+          handleChange={handleChange}
+        />
 
-        {/* manage brands */}
-        <div className="grid grid-rows-3">
-          <div className="flex flex-row place-content-between">
-            <div className="flex flex-row">
-              <p className="text-2xl mx-2">All Car Brands</p>
-              <Button
-                className="justify-center content-center text-white"
-                variant="contained"
-              >
-                +
-              </Button>
-            </div>
-            <div>
-              <DropdownMenu>
-                <DropdownMenuTrigger className="text-white">
-                  Filter
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem>Name</DropdownMenuItem>
-                  <DropdownMenuItem>Recently added</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </div>
-          <div>
-            <Card className="flex flex-row place-content-between">
-              <CardHeader>
-                <CardTitle>Toyota</CardTitle>
-              </CardHeader>
-              <CardContent className="justify-center content-center">
-                <Button
-                  className="justify-center content-center mx-2"
-                  variant="outline"
-                >
-                  Edit
-                </Button>
-                <Button
-                  className="justify-center content-center"
-                  variant="outline"
-                >
-                  Delete
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
+        {/* brands */}
+        <Section
+          title="All Car Brands"
+          data={brands}
+          type="brand"
+          handleChange={handleChange}
+        />
 
-        {/* manage cars */}
-        <div className="grid grid-rows-3">
-          <div className="flex flex-row place-content-between">
-            <div className="flex flex-row">
-              <p className="text-2xl mx-2">All Cars</p>
-              <Button
-                className="justify-center content-center text-white"
-                variant="contained"
-              >
-                +
-              </Button>
-            </div>
-            <div>
-              <DropdownMenu>
-                <DropdownMenuTrigger className="text-white">
-                  Filter
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem>Name</DropdownMenuItem>
-                  <DropdownMenuItem>Recently added</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </div>
-          <div>
-            <Card className="flex flex-row place-content-between">
-              <CardHeader>
-                <CardTitle>Supra</CardTitle>
-                <CardDescription>
-                  BMW Z4 rebadge, but hey its fun.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="justify-center content-center">
-                <Button
-                  className="justify-center content-center mx-2"
-                  variant="outline"
-                >
-                  Edit
-                </Button>
-                <Button
-                  className="justify-center content-center"
-                  variant="outline"
-                >
-                  Delete
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-        {/* manage users */}
-        <div className="grid grid-rows-3">
-          <div className="flex flex-row place-content-between">
-            <div className="flex flex-row">
-              <p className="text-2xl mx-2">All Users</p>
-              <Button
-                className="justify-center content-center text-white"
-                variant="contained"
-              >
-                +
-              </Button>
-            </div>
-            <div>
-              <DropdownMenu>
-                <DropdownMenuTrigger className="text-white">
-                  Filter
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem>Name</DropdownMenuItem>
-                  <DropdownMenuItem>Recently added</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </div>
-          <div>
-            <Card className="flex flex-row place-content-between">
-              <CardHeader>
-                <CardTitle>Keshen Naresh</CardTitle>
-              </CardHeader>
-              <CardContent className="justify-center content-center">
-                <Button
-                  className="justify-center content-center mx-2"
-                  variant="outline"
-                >
-                  Edit
-                </Button>
-                <Button
-                  className="justify-center content-center"
-                  variant="outline"
-                >
-                  Ban
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
+        {/* cars */}
+        <Section
+          title="All Cars"
+          data={cars}
+          type="car"
+          handleChange={handleChange}
+        />
 
-        {/* manage comments */}
-        <div className="grid grid-rows-3">
-          <div className="flex flex-row place-content-between">
-            <div className="flex flex-row">
-              <p className="text-2xl mx-2">All comments</p>
-              <Button
-                className="justify-center content-center text-white"
-                variant="contained"
-              >
-                +
-              </Button>
-            </div>
-            <div>
-              <DropdownMenu>
-                <DropdownMenuTrigger className="text-white">
-                  Filter
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem>Name</DropdownMenuItem>
-                  <DropdownMenuItem>Recently added</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </div>
-          <div>
-            <Card className="flex flex-row place-content-between">
-              <CardHeader>
-                <CardTitle>If only i were rich</CardTitle>
-                <CardDescription>Keshen Naresh</CardDescription>
-                <CardDescription>@ Supra</CardDescription>
-              </CardHeader>
-              <CardContent className="justify-center content-center">
-                <Button
-                  className="justify-center content-center mx-2"
-                  variant="outline"
-                >
-                  Edit
-                </Button>
-                <Button
-                  className="justify-center content-center"
-                  variant="outline"
-                >
-                  Delete
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
+        {/* users */}
+        <Section
+          title="All Users"
+          data={users}
+          type="user"
+          handleChange={handleChange}
+        />
+
+        {/* comments */}
+        <Section
+          title="All Comments"
+          data={comments}
+          type="comment"
+          handleChange={handleChange}
+        />
       </div>
     </>
   );

@@ -5,7 +5,11 @@ import { API_URL } from "../../constants";
 //get all
 export const getComments = async (carId, sortType = "latest") => {
   try {
-    const response = await axios.get(API_URL + "/comment/" + carId, sortType);
+    const response = await axios.get(API_URL + "/comment/" + carId, {
+      params: {
+        sortType: sortType === "latest" ? "createdAt" : sortType,
+      },
+    });
     return response.data;
   } catch (error) {
     console.log(error);

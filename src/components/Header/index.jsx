@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 export default function Header() {
   return (
@@ -8,15 +9,17 @@ export default function Header() {
           <div>
             <Button
               variant="solid"
-              className=" text-white px-6 py-3 rounded-full shadow-md  transition-all duration-300 mx-1"
+              className=" text-white bg-black px-6 py-3 rounded-full shadow-md  transition-all duration-300 mx-1"
+              asChild
             >
-              Home
+              <Link to="/">Home</Link>
             </Button>
             <Button
               variant="solid"
-              className=" text-white px-6 py-3 rounded-full shadow-md  transition-all duration-300 mx-1"
+              className=" text-white bg-black px-6 py-3 rounded-full shadow-md  transition-all duration-300 mx-1"
+              asChild
             >
-              Dashboard
+              <Link to="/dashboard">Dash</Link>
             </Button>
           </div>
         </div>
@@ -25,19 +28,22 @@ export default function Header() {
           <div>
             <Button
               variant="solid"
-              className=" text-white px-6 py-3 rounded-full shadow-md  transition-all duration-300 mx-1"
+              className=" text-white bg-black px-6 py-3 rounded-full shadow-md  transition-all duration-300 mx-1"
+              asChild
             >
-              Login
+              <Link to="/login">Login</Link>
             </Button>
             <Button
               variant="solid"
-              className=" text-white px-6 py-3 rounded-full shadow-md  transition-all duration-300 mx-1"
+              className=" text-white bg-black px-6 py-3 rounded-full shadow-md  transition-all duration-300 mx-1"
+              asChild
             >
-              Sign Up
+              <Link to="/signup">Sign Up</Link>
             </Button>
             <Button
               variant="solid"
-              className=" text-white px-6 py-3 rounded-full shadow-md  transition-all duration-300 mx-1"
+              className=" text-white bg-black px-6 py-3 rounded-full shadow-md  transition-all duration-300 mx-1"
+              asChild
             >
               Logout
             </Button>

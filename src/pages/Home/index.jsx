@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/carousel";
 
 import Header from "@/components/Header";
+import { Link } from "react-router-dom";
 
 export default function Home() {
   return (
@@ -52,9 +53,10 @@ export default function Home() {
 
                   <Button
                     variant="solid"
-                    className=" text-white px-6 py-3 rounded-full shadow-md  transition-all duration-300"
+                    className=" text-white bg-black px-6 py-3 rounded-full shadow-md  transition-all duration-300"
+                    asChild
                   >
-                    Start Your Journey
+                    <Link to="/signup">Join Us Today</Link>
                   </Button>
                 </CardContent>
               </Card>
@@ -141,9 +143,10 @@ export default function Home() {
               <CardContent>
                 <Button
                   variant="solid"
-                  className=" text-white px-6 py-3 rounded-full shadow-md  transition-all duration-300"
+                  className=" text-white bg-black px-6 py-3 rounded-full shadow-md  transition-all duration-300"
+                  asChild
                 >
-                  Go
+                  <Link to="/brand">Go</Link>
                 </Button>
               </CardContent>
             </Card>
