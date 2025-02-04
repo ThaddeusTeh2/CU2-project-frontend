@@ -1,4 +1,10 @@
 import { useEffect, useState } from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 //APIs
 import { getTypes } from "@/utils/api_type";
@@ -18,6 +24,7 @@ export default function Dashboard() {
   const [cars, setCars] = useState([]);
   const [users, setUsers] = useState([]);
   const [comments, setComments] = useState([]);
+  const [sortType, setSortType] = useState("name");
 
   const [cookies] = useCookies(["currentUser"]);
 
@@ -30,36 +37,36 @@ export default function Dashboard() {
 
   //get all types
   useEffect(() => {
-    getTypes()
+    getTypes(sortType)
       .then((data) => setTypes(data))
       .catch((error) => console.error(error));
-  }, [change]);
+  }, [change, sortType]);
 
   //get all brands
   useEffect(() => {
-    getBrands()
+    getBrands(sortType)
       .then((data) => setBrands(data))
       .catch((error) => console.error(error));
-  }, [change]);
+  }, [change, sortType]);
 
   //get all cars
   useEffect(() => {
-    getCarsAdmin(token)
+    getCarsAdmin(token, sortType)
       .then((data) => setCars(data))
       .catch((error) => console.error(error));
-  }, [change]);
+  }, [change, sortType]);
 
   //get all users
   useEffect(() => {
-    getAllUsers()
+    getAllUsers(sortType)
       .then((data) => setUsers(data))
       .catch((error) => console.error(error));
-  }, [change]);
+  }, [change, sortType]);
 
   //get all comments
   useEffect(() => {
     if (cars.length > 0) {
-      getAllComments(cars[0].id)
+      getAllComments(sortType)
         .then((data) => setComments(data))
         .catch((error) => console.error(error));
     }
@@ -72,6 +79,10 @@ export default function Dashboard() {
     setChange(!change);
   };
 
+  const handleSortType = (type) => {
+    setSortType(type);
+  };
+
   //all of the data being mapped comes from GET apis being passed as props down to these components (see 'Section' component)
 
   return currentUserRole == "admin" ? (
@@ -79,6 +90,22 @@ export default function Dashboard() {
       <div className="px-5 flex flex-col items-center justify-center">
         <Header />
         <h1 className="mb-5">Your Dash</h1>
+      </div>
+
+      <div>
+        <DropdownMenu>
+          <DropdownMenuTrigger className="text-white">
+            Filter
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem onSelect={() => handleSortType("name")}>
+              Name
+            </DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => handleSortType("latest")}>
+              Recently added
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       <div className="px-10">

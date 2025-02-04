@@ -22,16 +22,40 @@ import { Input } from "@/components/ui/input";
 
 export default function List() {
   const [cars, setCars] = useState([]);
+  const [oricars, setOricars] = useState([]);
+  const [search, setSearch] = useState("");
+  const [sortType, setSortType] = useState("latest");
 
   useEffect(() => {
     const brandId = localStorage.getItem("brand");
     const typeId = localStorage.getItem("type");
 
-    getCars(typeId, brandId, "latest").then((data) => {
+    getCars(typeId, brandId, sortType).then((data) => {
       console.log(data);
+      setOricars(data);
       setCars(data);
     });
-  }, []);
+  }, [sortType]);
+
+  const handleChange = (event) => {
+    setSearch(event.target.value);
+  };
+
+  const handleSortType = (type) => {
+    setSortType(type);
+  };
+
+  useEffect(() => {
+    if (search.trim() === "") {
+      setCars(oricars);
+    } else {
+      setCars(
+        oricars.filter((car) =>
+          car.name.toLowerCase().includes(search.trim().toLowerCase())
+        )
+      );
+    }
+  }, [search, oricars]);
 
   return (
     <>
@@ -43,8 +67,11 @@ export default function List() {
             </div>
             <div className="mb-5 flex place-content-between">
               <div className="flex w-full max-w-sm items-center space-x-2">
-                <Input car="text" placeholder="Search" />
-                <Button car="submit">Go</Button>
+                <Input
+                  type="text"
+                  placeholder="Search"
+                  onChange={handleChange}
+                />
               </div>
               <div>
                 <DropdownMenu>
@@ -52,8 +79,12 @@ export default function List() {
                     Filter
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
-                    <DropdownMenuItem>Name</DropdownMenuItem>
-                    <DropdownMenuItem>Recently added</DropdownMenuItem>
+                    <DropdownMenuItem onSelect={() => handleSortType("name")}>
+                      Name
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onSelect={() => handleSortType("latest")}>
+                      Recently added
+                    </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>

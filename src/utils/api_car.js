@@ -22,8 +22,7 @@ export const getCars = async (type, brand, sortType) => {
 };
 
 //get all admin
-export const getCarsAdmin = async (token, sortType = "latest") => {
-  console.log(token);
+export const getCarsAdmin = async (token, sortType) => {
   try {
     const response = await axios.get(API_URL + "/car/admin", {
       params: {

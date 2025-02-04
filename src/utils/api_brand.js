@@ -5,7 +5,9 @@ import { API_URL } from "../../constants";
 //get all brands
 export const getBrands = async (sortType) => {
   try {
-    const response = await axios.get(API_URL + "/brand", sortType);
+    const response = await axios.get(API_URL + "/brand", {
+      params: { sortType: sortType === "latest" ? "createdAt" : sortType },
+    });
     return response.data;
   } catch (error) {
     console.log(error);

@@ -13,13 +13,16 @@ import {
 import { Input } from "@/components/ui/input";
 
 import { Button } from "@/components/ui/button";
+import { addLike, deleteLike } from "@/utils/api_like";
 
 export default function Car() {
   const [car, setCar] = useState([]);
   const [comments, setComments] = useState([]);
-  const [change, setChange] = useState(false);
   const [input, setInput] = useState("");
   const [cookies] = useCookies(["currentUser"]);
+  const [liked, setLiked] = useState(null);
+  const [change, setChange] = useState(false);
+  const [likedComments, setLikedComments] = useState({});
 
   const token = cookies.currentUser;
 
@@ -29,15 +32,23 @@ export default function Car() {
     getCar(carId, "latest").then((data) => {
       console.log(data);
       setCar(data);
+      setLiked(data.like.includes(token._id));
     });
     if (carId) {
       getComments(carId, "latest").then((data) => {
         console.log(data);
         //set comments into state
+        const likedCommentState = {};
+        data.forEach((comment) => {
+          likedCommentState[comment._id] = comment.like.includes(token._id);
+        });
+        setLikedComments(likedCommentState);
         setComments(data);
       });
     }
-  }, [change]);
+  }, [liked, change]);
+
+  console.log(liked);
 
   const handleCommentInput = async (event) => {
     setInput(event.target.value);
@@ -56,8 +67,51 @@ export default function Car() {
     } else {
       //trigger add api
       await addComment(carId, input, currentUserId, token);
+      setInput("");
       setChange(!change);
     }
+  };
+
+  const handleLike = async (event) => {
+    event.preventDefault();
+    const carId = localStorage.getItem("car");
+
+    await addLike(carId, "car", token);
+    setLiked(true);
+  };
+
+  const handleUnlike = async (event) => {
+    event.preventDefault();
+    const carId = localStorage.getItem("car");
+
+    await deleteLike(carId, "car", token);
+    setLiked(false);
+  };
+
+  const handleLikeComment = async (commentId) => {
+    await addLike(commentId, "comment", token);
+    setLikedComments((prev) => ({ ...prev, [commentId]: true }));
+
+    setComments((prevComments) =>
+      prevComments.map((comment) =>
+        comment._id === commentId
+          ? { ...comment, like: [...comment.like, token._id] }
+          : comment
+      )
+    );
+  };
+
+  const handleUnlikeComment = async (commentId) => {
+    await deleteLike(commentId, "comment", token);
+    setLikedComments((prev) => ({ ...prev, [commentId]: false }));
+
+    setComments((prevComments) =>
+      prevComments.map((comment) =>
+        comment._id === commentId
+          ? { ...comment, like: comment.like.filter((id) => id !== token._id) }
+          : comment
+      )
+    );
   };
 
   return (
@@ -74,10 +128,13 @@ export default function Car() {
             <Button
               variant="solid"
               className=" text-white px-6 py-3 rounded-full shadow-md  transition-all duration-300"
+              onClick={(event) =>
+                liked ? handleUnlike(event) : handleLike(event)
+              }
             >
-              Like
+              {liked ? "Unlike" : "Like"}
             </Button>
-            <p>{car.likes ? car.likes.length : 0}</p>
+            <p>{car.like ? car.like.length : 0}</p>
           </CardContent>
         </Card>
 
@@ -100,10 +157,15 @@ export default function Car() {
                         <Button
                           variant="solid"
                           className="mx-2 text-white rounded-full shadow-md transition-all duration-300"
+                          onClick={() =>
+                            likedComments[comment._id]
+                              ? handleUnlikeComment(comment._id)
+                              : handleLikeComment(comment._id)
+                          }
                         >
-                          Like
+                          {likedComments[comment._id] ? "Unlike" : "Like"}
                         </Button>
-                        <p>{comment.likes ? comment.likes.length : 0} Likes</p>
+                        <p>{comment.like ? comment.like.length : 0} Likes</p>
                       </div>
                     </CardContent>
                   </Card>

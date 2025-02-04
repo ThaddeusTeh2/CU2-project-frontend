@@ -2,9 +2,11 @@ import axios from "axios";
 import { toast } from "sonner";
 import { API_URL } from "../../constants";
 
-export const getAllUsers = async (sortType = "latest") => {
+export const getAllUsers = async (sortType) => {
   try {
-    const response = await axios.get(API_URL + "/auth/users", sortType);
+    const response = await axios.get(API_URL + "/auth/users", {
+      params: { sortType: sortType === "latest" ? "createdAt" : sortType },
+    });
     return response.data;
   } catch (error) {
     console.log(error);
@@ -14,7 +16,7 @@ export const getAllUsers = async (sortType = "latest") => {
 // get 1 user by email
 export const getUserByEmail = async (email) => {
   try {
-    const response = await axios.get(API_URL + "/auth/users" + email);
+    const response = await axios.get(API_URL + "/auth/users/" + email);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -24,9 +26,9 @@ export const getUserByEmail = async (email) => {
 // update user by ID
 export const updateUser = async (id, name, token) => {
   try {
-    const response = await axios.put(API_URL + "/auth/users" + id, name, {
+    const response = await axios.put(API_URL + "/auth/users/" + id, name, {
       headers: {
-        Authorization: "Bearer " + token,
+        Authorization: "Bearer " + token.token,
       },
     });
     toast.success("User updated successfully");
@@ -39,9 +41,9 @@ export const updateUser = async (id, name, token) => {
 // delete user by ID
 export const deleteUser = async (id, token) => {
   try {
-    await axios.delete(API_URL + "/auth/users" + id, {
+    await axios.delete(API_URL + "/auth/users/" + id, {
       headers: {
-        Authorization: "Bearer " + token,
+        Authorization: "Bearer " + token.token,
       },
     });
     toast.success("user deleted successfully");

@@ -56,25 +56,14 @@ export default function Section({
     handleChange();
   };
   return (
-    <div className="grid grid-rows-3">
-      <div className="flex flex-row place-content-between">
-        <div className="flex flex-row">
-          <p className="text-2xl mx-2">{title}</p>
-          {type !== "user" && type !== "comment" && (
-            <AddDialog type={type} handleChange={handleChange} token={token} />
-          )}
-        </div>
-        {/* TODO make these change the filtering of the items */}
-        <DropdownMenu>
-          <DropdownMenuTrigger className="text-white">
-            Filter
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem>Name</DropdownMenuItem>
-            <DropdownMenuItem>Recently added</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+    <div className="flex flex-row place-content-between">
+      <div className="flex flex-row">
+        <p className="text-2xl mx-2">{title}</p>
+        {type !== "user" && type !== "comment" && (
+          <AddDialog type={type} handleChange={handleChange} token={token} />
+        )}
       </div>
+
       {/* dynamically mapped item */}
       <div>
         {/* map wrapped in a big ahh if else basically if nothing to map atleast show sum text */}

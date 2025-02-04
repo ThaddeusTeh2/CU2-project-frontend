@@ -7,15 +7,14 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-import { Check, ChevronsUpDown } from "lucide-react";
+import { ChevronsUpDown } from "lucide-react";
 
 import {
   Command,
   CommandEmpty,
   CommandGroup,
-  CommandInput,
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
@@ -26,10 +25,11 @@ import {
 } from "@/components/ui/popover";
 
 //APIs
-import { editBrand, getBrands } from "@/utils/api_brand";
-import { editType, getTypes } from "@/utils/api_type";
+import { editBrand } from "@/utils/api_brand";
+import { editType } from "@/utils/api_type";
 import { editCar } from "@/utils/api_car";
 import { editComment } from "@/utils/api_comment";
+import { updateUser } from "@/utils/api_user";
 
 import { toast } from "sonner";
 
@@ -94,19 +94,23 @@ export default function EditDialog({
     }
     //idk how to optimize this enjoy if-else family tree to determine which function gets used in the component
     try {
-      //if the type(name of the item) equals type(represent 'car body type') rizz the editType function from (API-->Dashboard-->Section-->EditDialog *you are here*)
+      //if the type(name of the item) equals type(represent 'car body type') rizz the edit function from (API-->Dashboard-->Section-->EditDialog *you are here*)
       if (type === "type") {
         const response = await editType(data._id, form.name, token);
         console.log(response);
-        //if not, if the type(name of the item) equals brand(car brand) rizz the editBrand function from (API-->Dashboard-->Section-->EditDialog *you are here*)
+        //if not, if the type(name of the item) equals brand(car brand) rizz the edit function from (API-->Dashboard-->Section-->EditDialog *you are here*)
       } else if (type == "brand") {
         const response = await editBrand(data._id, form.name, token);
         console.log(response);
-        //if not, if the type(name of the item) equals car, rizz the editBrand function from (API-->Dashboard-->Section-->EditDialog *you are here*)
+        //if not, if the type(name of the item) equals car, rizz the edit function from (API-->Dashboard-->Section-->EditDialog *you are here*)
       } else if (type == "car") {
         const response = await editCar(data._id, form, token);
         console.log(response);
-        //if not, if the type(name of the item) equals comment, rizz the editBrand function from (API-->Dashboard-->Section-->EditDialog *you are here*)
+        //if not, if the type(name of the item) equals user, rizz the edit function from (API-->Dashboard-->Section-->EditDialog *you are here*)
+      } else if (type == "user") {
+        const response = await updateUser(data._id, form, token);
+        console.log(response);
+        //if not, if the type(name of the item) equals comment, rizz the edit function from (API-->Dashboard-->Section-->EditDialog *you are here*)
       } else if (type == "comment") {
         const response = await editComment(data._id, form.content, token);
         console.log(response);

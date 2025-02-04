@@ -3,11 +3,12 @@ import { toast } from "sonner";
 import { API_URL } from "../../constants";
 
 //get all comments (actually)
-export const getAllComments = async (sortType = "latest") => {
+export const getAllComments = async (sortType) => {
   try {
+    console.log(sortType === "latest" ? "createdAt" : "content");
     const response = await axios.get(API_URL + "/comment", {
       params: {
-        sortType: sortType === "latest" ? "createdAt" : sortType,
+        sortType: sortType === "latest" ? "createdAt" : "content",
       },
     });
     return response.data;
@@ -21,7 +22,7 @@ export const getComments = async (carId, sortType = "latest") => {
   try {
     const response = await axios.get(API_URL + "/comment/" + carId, {
       params: {
-        sortType: sortType === "latest" ? "createdAt" : sortType,
+        sortType: sortType === "latest" ? "createdAt" : "content",
       },
     });
     return response.data;
