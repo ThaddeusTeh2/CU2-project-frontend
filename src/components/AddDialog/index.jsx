@@ -11,7 +11,6 @@ import { useEffect, useState } from "react";
 
 import { Check, ChevronsUpDown } from "lucide-react";
 
-import { cn } from "@/lib/utils";
 import {
   Command,
   CommandEmpty,
@@ -42,11 +41,14 @@ export default function AddDialog({ type, handleChange }) {
     } else if (type === "brand" || type === "type") {
       return { name: "" };
     }
-    return {}; // fallback for unexpected type values
+    // in case value returned from type is sus the form will just be empty n not j break
+    return {};
   });
+
   //by default the dialog is closed yes
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [popoverOpen, setPopoverOpen] = useState(null); // Track open popover
+  //state to follow if the popover open
+  const [popoverOpen, setPopoverOpen] = useState(null);
   const [brands, setBrands] = useState([]);
   const [types, setTypes] = useState([]);
   const [change, setChange] = useState(false);
@@ -87,6 +89,8 @@ export default function AddDialog({ type, handleChange }) {
         form[column] = form[column].trim();
       }
     }
+
+    //idk how to optimize this enjoy if-else family tree to determine which function gets used in the component
     try {
       // if the type(name of the item) equals type(represent 'car body type') rizz the addType function from (API-->Dashboard-->Section-->AddDialog *you are here*)
       if (type === "type") {
@@ -108,9 +112,9 @@ export default function AddDialog({ type, handleChange }) {
         } else if (type === "brand" || type === "type") {
           return { name: "" };
         }
-        return {}; // fallback for unexpected type values
+        // in case value returned from type is sus the form will just be empty n not break
+        return {};
       });
-      setChange((prev) => !prev);
       setDialogOpen(false);
     } catch (error) {
       console.error(error);

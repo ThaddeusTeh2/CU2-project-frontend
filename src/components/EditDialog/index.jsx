@@ -11,7 +11,6 @@ import { useEffect, useState } from "react";
 
 import { Check, ChevronsUpDown } from "lucide-react";
 
-import { cn } from "@/lib/utils";
 import {
   Command,
   CommandEmpty,
@@ -35,8 +34,13 @@ import { editComment } from "@/utils/api_comment";
 import { toast } from "sonner";
 
 //params from the section component (data = item itself, type = name for d item, handleChange to refresh upon change)
-export default function EditDialog({ data, type, handleChange }) {
-  console.log(data);
+export default function EditDialog({
+  data,
+  type,
+  handleChange,
+  brands,
+  types,
+}) {
   // form state based on item data
   const [form, setForm] = useState(
     //data is an object ah rmb
@@ -55,24 +59,9 @@ export default function EditDialog({ data, type, handleChange }) {
   );
   //by default the dialog is closed yes
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [popoverOpen, setPopoverOpen] = useState(null); // Track open popover
-  const [brands, setBrands] = useState([]);
-  const [types, setTypes] = useState([]);
+  const [popoverOpen, setPopoverOpen] = useState(null); // track open popover
+
   const [change, setChange] = useState(false);
-
-  //get all brands
-  useEffect(() => {
-    getBrands()
-      .then((data) => setBrands([...data]))
-      .catch((error) => console.error(error));
-  }, [change]);
-
-  //get all types
-  useEffect(() => {
-    getTypes()
-      .then((data) => setTypes([...data]))
-      .catch((error) => console.error(error));
-  }, [change]);
 
   //handle input changes
   const handleFormChange = (e) => {
@@ -96,6 +85,7 @@ export default function EditDialog({ data, type, handleChange }) {
         form[column] = form[column].trim();
       }
     }
+    //idk how to optimize this enjoy if-else family tree to determine which function gets used in the component
     try {
       //if the type(name of the item) equals type(represent 'car body type') rizz the editType function from (API-->Dashboard-->Section-->EditDialog *you are here*)
       if (type === "type") {
@@ -109,9 +99,12 @@ export default function EditDialog({ data, type, handleChange }) {
       } else if (type == "car") {
         const response = await editCar(data._id, form);
         console.log(response);
+        //if not, if the type(name of the item) equals comment, rizz the editBrand function from (API-->Dashboard-->Section-->EditDialog *you are here*)
+      } else if (type == "comment") {
+        const response = await editComment(data._id, form);
+        console.log(response);
       }
       handleChange();
-      setChange((prev) => !prev);
       setDialogOpen(false);
     } catch (error) {
       console.error(error);
@@ -135,7 +128,7 @@ export default function EditDialog({ data, type, handleChange }) {
           <DialogTitle>Edit {type}</DialogTitle>
         </DialogHeader>
 
-        {/* here i map d object's keys(name, description, brandid type id all dat) from the form */}
+        {/* here we map d object's keys(name, description, brand_id, type id all that) from the form */}
         {Object.keys(form).map((field) =>
           // we only want to show this popup when we map the car and the column got brand and type
           type === "car" && (field === "brand" || field === "type") ? (

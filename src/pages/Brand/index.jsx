@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 //import api
 import { getBrands } from "@/utils/api_brand";
+import Header from "@/components/Header";
 
 //shadcn imports
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -26,7 +27,8 @@ export default function Brand() {
 
   return (
     <>
-      <div className="flex justify-center">
+      <div className="flex flex-col px-10 justify-center">
+        <Header />
         <div className="container py-5">
           <div className="grid grid-rows-3">
             <div className="mb-5">

@@ -20,12 +20,22 @@ import { deleteCar } from "@/utils/api_car";
 import { deleteUser } from "@/utils/api_user";
 import { deleteComment } from "@/utils/api_comment";
 
-//dynamic component INSIDE another dynamic component (please end me)
+import { useCookies } from "react-cookie";
+
+//dynamic component INSIDE another dynamic component (please kill me)
 import EditDialog from "../EditDialog";
 import AddDialog from "../AddDialog";
 
 //params n stuff from the dashboard (title is a string that represent the title *duh*, data is the item itself, type is the name of the item )
-export default function Section({ title, data, type, handleChange }) {
+export default function Section({
+  title,
+  data,
+  type,
+  handleChange,
+  brands,
+  types,
+}) {
+  console.log(data);
   const handleDelete = async (itemId) => {
     if (type == "brand") {
       await deleteBrand(itemId);
@@ -45,7 +55,9 @@ export default function Section({ title, data, type, handleChange }) {
       <div className="flex flex-row place-content-between">
         <div className="flex flex-row">
           <p className="text-2xl mx-2">{title}</p>
-          <AddDialog type={type} handleChange={handleChange} />
+          {type !== "user" && type !== "comment" && (
+            <AddDialog type={type} handleChange={handleChange} />
+          )}
         </div>
         {/* TODO make these change the filtering of the items */}
         <DropdownMenu>
@@ -85,6 +97,8 @@ export default function Section({ title, data, type, handleChange }) {
                 <EditDialog
                   data={item}
                   type={type}
+                  brands={brands}
+                  types={types}
                   handleChange={handleChange}
                 />
                 {/* TODO make delete button work */}

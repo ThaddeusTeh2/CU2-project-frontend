@@ -27,9 +27,13 @@ export const getComment = async (commentId) => {
 };
 
 //add
-export const addComment = async (carId, content) => {
+export const addComment = async (carId, content, userId) => {
+  console.log(content);
   try {
-    const response = await axios.post(API_URL + "comment/" + carId, content);
+    const response = await axios.post(API_URL + "/comment/" + carId, {
+      content: content,
+      userId: userId,
+    });
     toast.success("comment added successfully");
     return response.data;
   } catch (error) {

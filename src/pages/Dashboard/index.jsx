@@ -9,6 +9,7 @@ import { getComments } from "@/utils/api_comment";
 
 import Header from "@/components/Header";
 import Section from "@/components/Section";
+import { useCookies } from "react-cookie";
 
 export default function Dashboard() {
   //states
@@ -18,7 +19,11 @@ export default function Dashboard() {
   const [users, setUsers] = useState([]);
   const [comments, setComments] = useState([]);
 
+  const [cookies] = useCookies(["currentUser"]);
+
   const [change, setChange] = useState(false);
+
+  const currentUserRole = cookies.currentUser?.role;
 
   //get all types
   useEffect(() => {
@@ -66,7 +71,7 @@ export default function Dashboard() {
 
   //all of the data being mapped comes from GET apis being passed as props down to these components (see 'Section' component)
 
-  return (
+  return currentUserRole == "admin" ? (
     <>
       <div className="px-5 flex flex-col items-center justify-center">
         <Header />
@@ -95,6 +100,8 @@ export default function Dashboard() {
           title="All Cars"
           data={cars}
           type="car"
+          brands={brands}
+          types={types}
           handleChange={handleChange}
         />
 
@@ -107,6 +114,21 @@ export default function Dashboard() {
         />
 
         {/* comments */}
+        <Section
+          title="All Comments"
+          data={comments}
+          type="comment"
+          handleChange={handleChange}
+        />
+      </div>
+    </>
+  ) : (
+    <>
+      <div className="px-5 flex flex-col items-center justify-center">
+        <Header />
+        <h1 className="mb-5">Your Dash</h1>
+      </div>
+      <div className="px-10">
         <Section
           title="All Comments"
           data={comments}

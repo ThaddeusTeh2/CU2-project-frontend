@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getCar } from "@/utils/api_car";
 import { getComments, addComment } from "@/utils/api_comment";
+import { useCookies } from "react-cookie";
 
 import {
   Card,
@@ -18,6 +19,7 @@ export default function Car() {
   const [comments, setComments] = useState([]);
   const [change, setChange] = useState(false);
   const [input, setInput] = useState("");
+  const [cookies] = useCookies(["currentUser"]);
 
   useEffect(() => {
     const carId = localStorage.getItem("car");
@@ -44,12 +46,14 @@ export default function Car() {
   const handleAdd = async (event) => {
     event.preventDefault();
     const carId = localStorage.getItem("car");
+    const currentUserId = cookies.currentUser?._id;
 
+    console.log(input);
     if (!input) {
       toast.error("type something dei");
-
+    } else {
       //trigger add api
-      await addComment(carId, input);
+      await addComment(carId, input, currentUserId);
       setChange(!change);
     }
   };
@@ -79,15 +83,15 @@ export default function Car() {
           <div className="w-full">
             <CardHeader>
               <CardTitle>Comments</CardTitle>
-              <CardDescription>Leave your thoughts below</CardDescription>
+              <CardDescription>What people are saying</CardDescription>
             </CardHeader>
             <CardContent>
               {comments.length > 0 ? (
                 comments.map((comment) => (
                   <Card key={comment._id} className="mb-4">
                     <CardHeader>
-                      <CardTitle>{comment.user}</CardTitle>
-                      <CardDescription>{comment.content}</CardDescription>
+                      <CardTitle>{comment.content}</CardTitle>
+                      <CardDescription>{comment.user.name}</CardDescription>
                     </CardHeader>
                     <CardContent>
                       <div className="flex flex-row-reverse">
