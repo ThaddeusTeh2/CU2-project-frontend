@@ -64,19 +64,11 @@ export const addComment = async (carId, content, userId, token) => {
 };
 
 //edit
-export const editComment = async (
-  commentId,
-  updatedContent,
-  userId,
-  userRole,
-  token
-) => {
+export const editComment = async (commentId, updatedContent, token) => {
   try {
     const response = await axios.put(
       API_URL + "/comment/" + commentId,
       {
-        userId: userId,
-        userRole: userRole,
         content: updatedContent,
       },
       {
@@ -94,22 +86,17 @@ export const editComment = async (
 
 //delete
 export const deleteComment = async (commentId, userId, userRole, token) => {
-  console.log(commentId, userId, userRole);
+  console.log(commentId, userId, userRole, token);
   try {
-    const response = await axios.delete(
-      API_URL + "/comment/" + commentId,
-      {
-        data: {
-          userId: userId,
-          userRole: userRole,
-        },
+    const response = await axios.delete(API_URL + "/comment/" + commentId, {
+      data: {
+        userId: userId,
+        userRole: userRole,
       },
-      {
-        headers: {
-          Authorization: "Bearer " + token.token,
-        },
-      }
-    );
+      headers: {
+        Authorization: "Bearer " + token.token,
+      },
+    });
     toast.success("comment deleted successfully");
     return response.data;
   } catch (error) {

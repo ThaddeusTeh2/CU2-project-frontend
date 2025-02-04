@@ -21,6 +21,8 @@ export default function Car() {
   const [input, setInput] = useState("");
   const [cookies] = useCookies(["currentUser"]);
 
+  const token = cookies.currentUser;
+
   useEffect(() => {
     const carId = localStorage.getItem("car");
 
@@ -53,7 +55,7 @@ export default function Car() {
       toast.error("type something dei");
     } else {
       //trigger add api
-      await addComment(carId, input, currentUserId);
+      await addComment(carId, input, currentUserId, token);
       setChange(!change);
     }
   };

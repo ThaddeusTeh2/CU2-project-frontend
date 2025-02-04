@@ -20,8 +20,6 @@ import { deleteCar } from "@/utils/api_car";
 import { deleteUser } from "@/utils/api_user";
 import { deleteComment } from "@/utils/api_comment";
 
-import { useCookies } from "react-cookie";
-
 //dynamic component INSIDE another dynamic component (please kill me)
 import EditDialog from "../EditDialog";
 import AddDialog from "../AddDialog";
@@ -35,8 +33,15 @@ export default function Section({
   brands,
   types,
   token,
+  currentUser,
+  currentUserRole,
 }) {
-  const handleDelete = async (itemId, token) => {
+  const handleDelete = async (
+    itemId,
+    currentUserId,
+    currentUserRole,
+    token
+  ) => {
     if (type == "brand") {
       await deleteBrand(itemId, token);
     } else if (type == "type") {
@@ -46,7 +51,7 @@ export default function Section({
     } else if (type == "user") {
       await deleteUser(itemId, token);
     } else if (type == "comment") {
-      await deleteComment(itemId, token);
+      await deleteComment(itemId, currentUserId, currentUserRole, token);
     }
     handleChange();
   };
@@ -73,7 +78,7 @@ export default function Section({
       {/* dynamically mapped item */}
       <div>
         {/* map wrapped in a big ahh if else basically if nothing to map atleast show sum text */}
-        {data.length > 0 ? (
+        {data && data.length > 0 ? (
           data.map((item) => (
             <Card
               key={item._id}
@@ -93,23 +98,39 @@ export default function Section({
                 )}
               </CardHeader>
               <CardContent className="justify-center content-center">
-                {/* pass the data down another level to prefill its fields ltr */}
-                <EditDialog
-                  data={item}
-                  type={type}
-                  brands={brands}
-                  types={types}
-                  handleChange={handleChange}
-                  token={token}
-                />
-                {/* TODO make delete button work */}
-                <Button
-                  className="justify-center content-center"
-                  variant="outline"
-                  onClick={() => handleDelete(item._id, token)}
-                >
-                  Delete
-                </Button>
+                {type !== "user" ||
+                (type === "user" && item._id !== currentUser) ? (
+                  <>
+                    {/* pass down the data to the edit dialog */}
+                    {type !== "comment" ||
+                    (type == "comment" && item.user._id == currentUser) ? (
+                      <EditDialog
+                        data={item}
+                        type={type}
+                        brands={brands}
+                        types={types}
+                        handleChange={handleChange}
+                        token={token}
+                        currentUser
+                        currentUserRole
+                      />
+                    ) : null}
+                    <Button
+                      className="justify-center content-center"
+                      variant="outline"
+                      onClick={() =>
+                        handleDelete(
+                          item._id,
+                          currentUser,
+                          currentUserRole,
+                          token
+                        )
+                      }
+                    >
+                      Delete
+                    </Button>
+                  </>
+                ) : null}
               </CardContent>
             </Card>
           ))

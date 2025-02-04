@@ -26,6 +26,7 @@ export default function Dashboard() {
   const token = cookies.currentUser;
 
   const currentUserRole = cookies.currentUser?.role;
+  const currentUserId = cookies.currentUser?._id;
 
   //get all types
   useEffect(() => {
@@ -88,6 +89,8 @@ export default function Dashboard() {
           type="type"
           handleChange={handleChange}
           token={token}
+          currentUser={currentUserId}
+          currentUserRole={currentUserRole}
         />
 
         {/* brands */}
@@ -97,6 +100,8 @@ export default function Dashboard() {
           type="brand"
           handleChange={handleChange}
           token={token}
+          currentUser={currentUserId}
+          currentUserRole={currentUserRole}
         />
 
         {/* cars */}
@@ -108,6 +113,8 @@ export default function Dashboard() {
           types={types}
           handleChange={handleChange}
           token={token}
+          currentUser={currentUserId}
+          currentUserRole={currentUserRole}
         />
 
         {/* users */}
@@ -117,6 +124,8 @@ export default function Dashboard() {
           type="user"
           handleChange={handleChange}
           token={token}
+          currentUser={currentUserId}
+          currentUserRole={currentUserRole}
         />
 
         {/* comments */}
@@ -126,6 +135,8 @@ export default function Dashboard() {
           type="comment"
           handleChange={handleChange}
           token={token}
+          currentUser={currentUserId}
+          currentUserRole={currentUserRole}
         />
       </div>
     </>
@@ -136,9 +147,10 @@ export default function Dashboard() {
         <h1 className="mb-5">Your Dash</h1>
       </div>
       <div className="px-10">
+        {/* data is filtered for regular users so they can only view their own comments */}
         <Section
           title="All Comments"
-          data={comments}
+          data={comments.filter((comment) => comment.user._id == currentUserId)}
           type="comment"
           handleChange={handleChange}
         />

@@ -41,6 +41,8 @@ export default function EditDialog({
   brands,
   types,
   token,
+  currentUser,
+  currentUserRole,
 }) {
   // form state based on item data
   const [form, setForm] = useState(
@@ -106,7 +108,7 @@ export default function EditDialog({
         console.log(response);
         //if not, if the type(name of the item) equals comment, rizz the editBrand function from (API-->Dashboard-->Section-->EditDialog *you are here*)
       } else if (type == "comment") {
-        const response = await editComment(data._id, form, token);
+        const response = await editComment(data._id, form.content, token);
         console.log(response);
       }
       handleChange();
