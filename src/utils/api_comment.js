@@ -52,7 +52,7 @@ export const addComment = async (carId, content, userId, token) => {
       },
       {
         headers: {
-          Authorization: "Bearer " + token,
+          Authorization: "Bearer " + token.token,
         },
       }
     );
@@ -81,7 +81,7 @@ export const editComment = async (
       },
       {
         headers: {
-          Authorization: "Bearer " + token,
+          Authorization: "Bearer " + token.token,
         },
       }
     );
@@ -106,7 +106,7 @@ export const deleteComment = async (commentId, userId, userRole, token) => {
       },
       {
         headers: {
-          Authorization: "Bearer " + token,
+          Authorization: "Bearer " + token.token,
         },
       }
     );

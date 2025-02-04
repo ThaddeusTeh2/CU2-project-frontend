@@ -32,7 +32,7 @@ export const addBrand = async (name, token) => {
       },
       {
         headers: {
-          Authorization: "Bearer " + token,
+          Authorization: "Bearer " + token.token,
         },
       }
     );
@@ -53,7 +53,7 @@ export const editBrand = async (id, name, token) => {
       },
       {
         headers: {
-          Authorization: "Bearer " + token,
+          Authorization: "Bearer " + token.token,
         },
       }
     );
@@ -69,7 +69,7 @@ export const deleteBrand = async (id, token) => {
   try {
     const response = await axios.delete(API_URL + "/brand/" + id, {
       headers: {
-        Authorization: "Bearer " + token,
+        Authorization: "Bearer " + token.token,
       },
     });
     toast.success("brand deleted successfully");

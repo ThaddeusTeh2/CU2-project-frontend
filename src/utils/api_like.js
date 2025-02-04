@@ -22,7 +22,7 @@ export const deleteLike = async (id, token) => {
   try {
     const response = await axios.delete(API_URL + "/like/" + id, {
       headers: {
-        Authorization: "Bearer " + token,
+        Authorization: "Bearer " + token.token,
       },
     });
     toast.success("unliked!");

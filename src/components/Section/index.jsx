@@ -106,7 +106,7 @@ export default function Section({
                 <Button
                   className="justify-center content-center"
                   variant="outline"
-                  onClick={() => handleDelete(item._id)}
+                  onClick={() => handleDelete(item._id, token)}
                 >
                   Delete
                 </Button>

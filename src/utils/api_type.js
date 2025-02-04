@@ -54,7 +54,7 @@ export const editType = async (id, name, token) => {
       },
       {
         headers: {
-          Authorization: "Bearer " + token,
+          Authorization: "Bearer " + token.token,
         },
       }
     );
@@ -70,7 +70,7 @@ export const deleteType = async (id, token) => {
   try {
     const response = await axios.delete(API_URL + "/type/" + id, {
       headers: {
-        Authorization: "Bearer " + token,
+        Authorization: "Bearer " + token.token,
       },
     });
     toast.success("type deleted successfully");

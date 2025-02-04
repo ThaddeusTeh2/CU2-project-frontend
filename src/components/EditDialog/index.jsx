@@ -40,6 +40,7 @@ export default function EditDialog({
   handleChange,
   brands,
   types,
+  token,
 }) {
   // form state based on item data
   const [form, setForm] = useState(
@@ -93,19 +94,19 @@ export default function EditDialog({
     try {
       //if the type(name of the item) equals type(represent 'car body type') rizz the editType function from (API-->Dashboard-->Section-->EditDialog *you are here*)
       if (type === "type") {
-        const response = await editType(data._id, form.name);
+        const response = await editType(data._id, form.name, token);
         console.log(response);
         //if not, if the type(name of the item) equals brand(car brand) rizz the editBrand function from (API-->Dashboard-->Section-->EditDialog *you are here*)
       } else if (type == "brand") {
-        const response = await editBrand(data._id, form.name);
+        const response = await editBrand(data._id, form.name, token);
         console.log(response);
         //if not, if the type(name of the item) equals car, rizz the editBrand function from (API-->Dashboard-->Section-->EditDialog *you are here*)
       } else if (type == "car") {
-        const response = await editCar(data._id, form);
+        const response = await editCar(data._id, form, token);
         console.log(response);
         //if not, if the type(name of the item) equals comment, rizz the editBrand function from (API-->Dashboard-->Section-->EditDialog *you are here*)
       } else if (type == "comment") {
-        const response = await editComment(data._id, form);
+        const response = await editComment(data._id, form, token);
         console.log(response);
       }
       handleChange();

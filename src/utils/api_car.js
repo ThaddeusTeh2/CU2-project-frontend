@@ -64,7 +64,7 @@ export const addCar = async (carData, token) => {
       },
       {
         headers: {
-          Authorization: "Bearer " + token,
+          Authorization: "Bearer " + token.token,
         },
       }
     );
@@ -89,7 +89,7 @@ export const editCar = async (id, carData, token) => {
       },
       {
         headers: {
-          Authorization: "Bearer " + token,
+          Authorization: "Bearer " + token.token,
         },
       }
     );
@@ -101,11 +101,11 @@ export const editCar = async (id, carData, token) => {
 };
 
 //delete
-export const deleteCar = async (id) => {
+export const deleteCar = async (id, token) => {
   try {
     await axios.delete(API_URL + "/car/" + id, {
       headers: {
-        Authorization: "Bearer " + token,
+        Authorization: "Bearer " + token.token,
       },
     });
     toast.success("car deleted successfully");
