@@ -23,6 +23,8 @@ export default function Dashboard() {
 
   const [change, setChange] = useState(false);
 
+  const token = cookies.currentUser;
+
   const currentUserRole = cookies.currentUser?.role;
 
   //get all types
@@ -41,7 +43,7 @@ export default function Dashboard() {
 
   //get all cars
   useEffect(() => {
-    getCarsAdmin()
+    getCarsAdmin(token)
       .then((data) => setCars(data))
       .catch((error) => console.error(error));
   }, [change]);

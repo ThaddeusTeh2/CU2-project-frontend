@@ -22,11 +22,15 @@ export const getCars = async (type, brand, sortType) => {
 };
 
 //get all admin
-export const getCarsAdmin = async (sortType) => {
+export const getCarsAdmin = async (token, sortType = "latest") => {
+  console.log(token);
   try {
     const response = await axios.get(API_URL + "/car/admin", {
       params: {
         sortType: sortType === "latest" ? "createdAt" : sortType,
+      },
+      headers: {
+        Authorization: "Bearer " + token.token,
       },
     });
     return response.data;

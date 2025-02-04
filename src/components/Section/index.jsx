@@ -80,7 +80,7 @@ export default function Section({
               className="flex flex-row place-content-between"
             >
               <CardHeader>
-                <CardTitle>{item.name || item.title}</CardTitle>
+                <CardTitle>{item.name || item.title || item.content}</CardTitle>
                 {/* only render the item description when the cars are mapped since cars are the only item w a description */}
                 {type === "car" && (
                   <CardDescription>{item.description}</CardDescription>
@@ -88,7 +88,7 @@ export default function Section({
                 {/* show the comment's commenter and where it came from */}
                 {type === "comment" && (
                   <CardDescription>
-                    {item.userName} @ {item.carName}
+                    {item.user.name} @ {item.car.name}
                   </CardDescription>
                 )}
               </CardHeader>
