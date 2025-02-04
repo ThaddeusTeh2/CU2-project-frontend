@@ -34,19 +34,19 @@ export default function Section({
   handleChange,
   brands,
   types,
+  token,
 }) {
-  console.log(data);
-  const handleDelete = async (itemId) => {
+  const handleDelete = async (itemId, token) => {
     if (type == "brand") {
-      await deleteBrand(itemId);
+      await deleteBrand(itemId, token);
     } else if (type == "type") {
-      await deleteType(itemId);
+      await deleteType(itemId, token);
     } else if (type == "car") {
-      await deleteCar(itemId);
+      await deleteCar(itemId, token);
     } else if (type == "user") {
-      await deleteUser(itemId);
+      await deleteUser(itemId, token);
     } else if (type == "comment") {
-      await deleteComment(itemId);
+      await deleteComment(itemId, token);
     }
     handleChange();
   };
@@ -56,7 +56,7 @@ export default function Section({
         <div className="flex flex-row">
           <p className="text-2xl mx-2">{title}</p>
           {type !== "user" && type !== "comment" && (
-            <AddDialog type={type} handleChange={handleChange} />
+            <AddDialog type={type} handleChange={handleChange} token={token} />
           )}
         </div>
         {/* TODO make these change the filtering of the items */}
@@ -100,6 +100,7 @@ export default function Section({
                   brands={brands}
                   types={types}
                   handleChange={handleChange}
+                  token={token}
                 />
                 {/* TODO make delete button work */}
                 <Button

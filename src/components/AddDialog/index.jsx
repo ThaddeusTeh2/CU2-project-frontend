@@ -33,7 +33,7 @@ import { addCar } from "@/utils/api_car";
 import { toast } from "sonner";
 
 //params from the section component (data = item itself, type = name for d item, handleChange to refresh upon change)
-export default function AddDialog({ type, handleChange }) {
+export default function AddDialog({ type, handleChange, token }) {
   // form state based on item data
   const [form, setForm] = useState(() => {
     if (type === "car") {
@@ -94,15 +94,15 @@ export default function AddDialog({ type, handleChange }) {
     try {
       // if the type(name of the item) equals type(represent 'car body type') rizz the addType function from (API-->Dashboard-->Section-->AddDialog *you are here*)
       if (type === "type") {
-        const response = await addType(form.name);
+        const response = await addType(form.name, token);
         console.log(response);
         //if not, if the type(name of the item) equals brand(car brand) rizz the addBrand function from (API-->Dashboard-->Section-->AddDialog *you are here*)
       } else if (type == "brand") {
-        const response = await addBrand(form.name);
+        const response = await addBrand(form.name, token);
         console.log(response);
         //if not, if the type(name of the item) equals car, rizz the addBrand function from (API-->Dashboard-->Section-->AddDialog *you are here*)
       } else if (type == "car") {
-        const response = await addCar(form);
+        const response = await addCar(form, token);
         console.log(response);
       }
       handleChange();

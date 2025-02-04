@@ -87,6 +87,7 @@ export default function Dashboard() {
           data={types}
           type="type"
           handleChange={handleChange}
+          token={token}
         />
 
         {/* brands */}
@@ -95,6 +96,7 @@ export default function Dashboard() {
           data={brands}
           type="brand"
           handleChange={handleChange}
+          token={token}
         />
 
         {/* cars */}
@@ -105,6 +107,7 @@ export default function Dashboard() {
           brands={brands}
           types={types}
           handleChange={handleChange}
+          token={token}
         />
 
         {/* users */}
@@ -113,6 +116,7 @@ export default function Dashboard() {
           data={users}
           type="user"
           handleChange={handleChange}
+          token={token}
         />
 
         {/* comments */}
@@ -121,6 +125,7 @@ export default function Dashboard() {
           data={comments}
           type="comment"
           handleChange={handleChange}
+          token={token}
         />
       </div>
     </>

@@ -25,6 +25,7 @@ export const getType = async (id) => {
 //add
 export const addType = async (name, token) => {
   try {
+    console.log(token);
     const response = await axios.post(
       API_URL + "/type",
       {
@@ -32,7 +33,7 @@ export const addType = async (name, token) => {
       },
       {
         headers: {
-          Authorization: "Bearer " + token,
+          Authorization: "Bearer " + token.token,
         },
       }
     );

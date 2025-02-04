@@ -52,6 +52,7 @@ export const getCar = async (id) => {
 //add
 export const addCar = async (carData, token) => {
   try {
+    console.log(token);
     const response = await axios.post(
       API_URL + "/car",
       {
