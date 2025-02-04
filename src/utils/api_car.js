@@ -46,15 +46,23 @@ export const getCar = async (id) => {
 };
 
 //add
-export const addCar = async (carData) => {
+export const addCar = async (carData, token) => {
   try {
-    const response = await axios.post(API_URL + "/car", {
-      name: carData.name,
-      description: carData.description,
-      type: carData.type,
-      brand: carData.brand,
-      image: carData.image,
-    });
+    const response = await axios.post(
+      API_URL + "/car",
+      {
+        name: carData.name,
+        description: carData.description,
+        type: carData.type,
+        brand: carData.brand,
+        image: carData.image,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
     toast.success("car added successfully");
     return response.data;
   } catch (error) {
@@ -63,15 +71,23 @@ export const addCar = async (carData) => {
 };
 
 //edit
-export const editCar = async (id, carData) => {
+export const editCar = async (id, carData, token) => {
   try {
-    const response = await axios.put(API_URL + "/car/" + id, {
-      name: carData.name,
-      description: carData.description,
-      type: carData.type,
-      brand: carData.brand,
-      image: carData.image,
-    });
+    const response = await axios.put(
+      API_URL + "/car/" + id,
+      {
+        name: carData.name,
+        description: carData.description,
+        type: carData.type,
+        brand: carData.brand,
+        image: carData.image,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
     toast.success("car updated successfully");
     return response.data;
   } catch (error) {
@@ -82,7 +98,11 @@ export const editCar = async (id, carData) => {
 //delete
 export const deleteCar = async (id) => {
   try {
-    await axios.delete(API_URL + "/car/" + id);
+    await axios.delete(API_URL + "/car/" + id, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
     toast.success("car deleted successfully");
   } catch (error) {
     console.log(error);

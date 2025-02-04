@@ -23,11 +23,19 @@ export const getBrand = async (id) => {
 };
 
 //add brand
-export const addBrand = async (name) => {
+export const addBrand = async (name, token) => {
   try {
-    const response = await axios.post(API_URL + "/brand/", {
-      name: name,
-    });
+    const response = await axios.post(
+      API_URL + "/brand/",
+      {
+        name: name,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
     toast.success("brand added successfully");
     return response.data;
   } catch (error) {
@@ -36,11 +44,19 @@ export const addBrand = async (name) => {
 };
 
 //edit brand
-export const editBrand = async (id, name) => {
+export const editBrand = async (id, name, token) => {
   try {
-    const response = await axios.put(API_URL + "/brand/" + id, {
-      name: name,
-    });
+    const response = await axios.put(
+      API_URL + "/brand/" + id,
+      {
+        name: name,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
     toast.success("brand updated successfully");
     return response.data;
   } catch (error) {
@@ -49,9 +65,13 @@ export const editBrand = async (id, name) => {
 };
 
 //delete brand
-export const deleteBrand = async (id) => {
+export const deleteBrand = async (id, token) => {
   try {
-    const response = await axios.delete(API_URL + "/brand/" + id);
+    const response = await axios.delete(API_URL + "/brand/" + id, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
     toast.success("brand deleted successfully");
     return response.data;
   } catch (error) {

@@ -22,9 +22,13 @@ export const getUserByEmail = async (email) => {
 };
 
 // update user by ID
-export const updateUser = async (id, name) => {
+export const updateUser = async (id, name, token) => {
   try {
-    const response = await axios.put(API_URL + "/auth/users" + id, name);
+    const response = await axios.put(API_URL + "/auth/users" + id, name, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
     toast.success("User updated successfully");
     return response.data;
   } catch (error) {
@@ -33,9 +37,13 @@ export const updateUser = async (id, name) => {
 };
 
 // delete user by ID
-export const deleteUser = async (id) => {
+export const deleteUser = async (id, token) => {
   try {
-    await axios.delete(API_URL + "/auth/users" + id);
+    await axios.delete(API_URL + "/auth/users" + id, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
     toast.success("user deleted successfully");
   } catch (error) {
     console.log(error);

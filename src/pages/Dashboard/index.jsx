@@ -5,7 +5,7 @@ import { getTypes } from "@/utils/api_type";
 import { getBrands } from "@/utils/api_brand";
 import { getCarsAdmin } from "@/utils/api_car";
 import { getAllUsers } from "@/utils/api_user";
-import { getComments } from "@/utils/api_comment";
+import { getAllComments } from "@/utils/api_comment";
 
 import Header from "@/components/Header";
 import Section from "@/components/Section";
@@ -56,7 +56,7 @@ export default function Dashboard() {
   //get all comments
   useEffect(() => {
     if (cars.length > 0) {
-      getComments(cars[0].id)
+      getAllComments(cars[0].id)
         .then((data) => setComments(data))
         .catch((error) => console.error(error));
     }

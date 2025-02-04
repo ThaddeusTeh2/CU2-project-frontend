@@ -23,11 +23,19 @@ export const getType = async (id) => {
 };
 
 //add
-export const addType = async (name) => {
+export const addType = async (name, token) => {
   try {
-    const response = await axios.post(API_URL + "/type", {
-      name: name,
-    });
+    const response = await axios.post(
+      API_URL + "/type",
+      {
+        name: name,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
     toast.success("type added successfully");
     return response.data;
   } catch (error) {
@@ -36,11 +44,19 @@ export const addType = async (name) => {
 };
 
 //edit
-export const editType = async (id, name) => {
+export const editType = async (id, name, token) => {
   try {
-    const response = await axios.put(API_URL + "/type/" + id, {
-      name: name,
-    });
+    const response = await axios.put(
+      API_URL + "/type/" + id,
+      {
+        name: name,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
     toast.success("Type updated successfully");
     return response.data;
   } catch (error) {
@@ -49,9 +65,13 @@ export const editType = async (id, name) => {
 };
 
 //delete
-export const deleteType = async (id) => {
+export const deleteType = async (id, token) => {
   try {
-    const response = await axios.delete(API_URL + "/type/" + id);
+    const response = await axios.delete(API_URL + "/type/" + id, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
     toast.success("type deleted successfully");
     return response.data;
   } catch (error) {

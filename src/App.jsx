@@ -1,6 +1,7 @@
 // import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CookiesProvider } from "react-cookie";
+import { Toaster } from "sonner";
 
 //routes
 import Brand from "./pages/Brand";
@@ -28,6 +29,7 @@ function App() {
             <Route path="/signup" element={<Signup />} />
           </Routes>
         </BrowserRouter>
+        <Toaster expand={true} richColors position="top-right" />
       </CookiesProvider>
     </div>
   );

@@ -2,7 +2,21 @@ import axios from "axios";
 import { toast } from "sonner";
 import { API_URL } from "../../constants";
 
-//get all
+//get all comments (actually)
+export const getAllComments = async (sortType = "latest") => {
+  try {
+    const response = await axios.get(API_URL + "/comment", {
+      params: {
+        sortType: sortType === "latest" ? "createdAt" : sortType,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//get all comments based on car
 export const getComments = async (carId, sortType = "latest") => {
   try {
     const response = await axios.get(API_URL + "/comment/" + carId, {
@@ -27,13 +41,21 @@ export const getComment = async (commentId) => {
 };
 
 //add
-export const addComment = async (carId, content, userId) => {
+export const addComment = async (carId, content, userId, token) => {
   console.log(content);
   try {
-    const response = await axios.post(API_URL + "/comment/" + carId, {
-      content: content,
-      userId: userId,
-    });
+    const response = await axios.post(
+      API_URL + "/comment/" + carId,
+      {
+        content: content,
+        userId: userId,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
     toast.success("comment added successfully");
     return response.data;
   } catch (error) {
@@ -42,11 +64,27 @@ export const addComment = async (carId, content, userId) => {
 };
 
 //edit
-export const editComment = async (commentId, updatedContent) => {
+export const editComment = async (
+  commentId,
+  updatedContent,
+  userId,
+  userRole,
+  token
+) => {
   try {
-    const response = await axios.put(API_URL + "/comment/" + commentId, {
-      content: updatedContent,
-    });
+    const response = await axios.put(
+      API_URL + "/comment/" + commentId,
+      {
+        userId: userId,
+        userRole: userRole,
+        content: updatedContent,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
     toast.success("comment updated successfully");
     return response.data;
   } catch (error) {
@@ -55,9 +93,23 @@ export const editComment = async (commentId, updatedContent) => {
 };
 
 //delete
-export const deleteComment = async (commentId) => {
+export const deleteComment = async (commentId, userId, userRole, token) => {
+  console.log(commentId, userId, userRole);
   try {
-    const response = await axios.delete(API_URL + "/comment/" + commentId);
+    const response = await axios.delete(
+      API_URL + "/comment/" + commentId,
+      {
+        data: {
+          userId: userId,
+          userRole: userRole,
+        },
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
     toast.success("comment deleted successfully");
     return response.data;
   } catch (error) {

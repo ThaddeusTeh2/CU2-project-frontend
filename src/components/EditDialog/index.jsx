@@ -53,7 +53,11 @@ export default function EditDialog({
           column !== "__v" &&
           column !== "createdAt" &&
           column !== "updatedAt" &&
-          column !== "like"
+          column !== "like" &&
+          column !== "car" &&
+          column !== "user" &&
+          column !== "email" &&
+          column !== "password"
       )
     )
   );
@@ -130,18 +134,16 @@ export default function EditDialog({
 
         {/* here we map d object's keys(name, description, brand_id, type id all that) from the form */}
         {Object.keys(form).map((field) =>
-          // we only want to show this popup when we map the car and the column got brand and type
           type === "car" && (field === "brand" || field === "type") ? (
             <Popover
               key={field}
-              open={popoverOpen === field} // Only open for the active field
+              open={popoverOpen === field}
               onOpenChange={(isOpen) => setPopoverOpen(isOpen ? field : null)}
             >
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
                   role="combobox"
-                  aria-expanded={open}
                   className="w-[200px] justify-between my-2"
                 >
                   {form[field]
@@ -164,8 +166,7 @@ export default function EditDialog({
                           value={item._id}
                           onSelect={(currentValue) => {
                             setForm({ ...form, [field]: currentValue });
-                            setPopoverOpen(false);
-                            console.log(form);
+                            setPopoverOpen(null);
                           }}
                         >
                           {item.name}
@@ -176,13 +177,50 @@ export default function EditDialog({
                 </Command>
               </PopoverContent>
             </Popover>
+          ) : type === "user" && field === "role" ? ( // New Popover for User Role
+            <Popover
+              key={field}
+              open={popoverOpen === field}
+              onOpenChange={(isOpen) => setPopoverOpen(isOpen ? field : null)}
+            >
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  role="combobox"
+                  className="w-[200px] justify-between my-2"
+                >
+                  {form[field]
+                    ? form[field].charAt(0).toUpperCase() + form[field].slice(1)
+                    : "Select Role"}
+                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-[200px] p-0">
+                <Command>
+                  <CommandList>
+                    <CommandGroup>
+                      {["admin", "user"].map((role) => (
+                        <CommandItem
+                          key={role}
+                          value={role}
+                          onSelect={() => {
+                            setForm({ ...form, [field]: role });
+                            setPopoverOpen(null);
+                          }}
+                        >
+                          {role.charAt(0).toUpperCase() + role.slice(1)}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </CommandList>
+                </Command>
+              </PopoverContent>
+            </Popover>
           ) : (
-            //otherwise show
             <Input
               key={field}
               name={field}
               placeholder={"Update " + field}
-              //we set the value of the input to the current value so it prefill the input box :D
               value={form[field]}
               onChange={handleFormChange}
               className="my-2"
