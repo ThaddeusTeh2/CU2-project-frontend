@@ -56,8 +56,8 @@ export default function Section({
     handleChange();
   };
   return (
-    <div className="flex flex-row place-content-between">
-      <div className="flex flex-row">
+    <div className="flex flex-col ">
+      <div className="flex flex-row my-5">
         <p className="text-2xl mx-2">{title}</p>
         {type !== "user" && type !== "comment" && (
           <AddDialog type={type} handleChange={handleChange} token={token} />
@@ -71,13 +71,17 @@ export default function Section({
           data.map((item) => (
             <Card
               key={item._id}
-              className="flex flex-row place-content-between"
+              className="flex flex-row place-content-between mb-2"
             >
               <CardHeader>
                 <CardTitle>{item.name || item.title || item.content}</CardTitle>
                 {/* only render the item description when the cars are mapped since cars are the only item w a description */}
                 {type === "car" && (
-                  <CardDescription>{item.description}</CardDescription>
+                  <CardDescription>
+                    {item.description.length > 25
+                      ? `${item.description.substring(0, 25)}...`
+                      : item.description}
+                  </CardDescription>
                 )}
                 {/* show the comment's commenter and where it came from */}
                 {type === "comment" && (
@@ -86,10 +90,10 @@ export default function Section({
                   </CardDescription>
                 )}
               </CardHeader>
-              <CardContent className="justify-center content-center">
+              <CardContent className="flex justify-center pt-5 items-center">
                 {type !== "user" ||
                 (type === "user" && item._id !== currentUser) ? (
-                  <>
+                  <div className="flex justify-center items-center">
                     {/* pass down the data to the edit dialog */}
                     {type !== "comment" ||
                     (type == "comment" && item.user._id == currentUser) ? (
@@ -118,7 +122,7 @@ export default function Section({
                     >
                       Delete
                     </Button>
-                  </>
+                  </div>
                 ) : null}
               </CardContent>
             </Card>

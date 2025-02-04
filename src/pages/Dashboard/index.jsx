@@ -86,87 +86,89 @@ export default function Dashboard() {
   //all of the data being mapped comes from GET apis being passed as props down to these components (see 'Section' component)
 
   return currentUserRole == "admin" ? (
-    <>
-      <div className="px-5 flex flex-col items-center justify-center">
-        <Header />
-        <h1 className="mb-5">Your Dash</h1>
+    <div className="flex justify-center items-center">
+      <div className="container">
+        <div className="px-5 flex flex-col items-center justify-center">
+          <Header />
+          <h1 className="mb-5">Your Dash</h1>
+        </div>
+
+        <div className="flex flex-row-reverse mx-5">
+          <DropdownMenu>
+            <DropdownMenuTrigger className="text-white">
+              Filter
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem onSelect={() => handleSortType("name")}>
+                Name
+              </DropdownMenuItem>
+              <DropdownMenuItem onSelect={() => handleSortType("latest")}>
+                Recently added
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+
+        <div className="px-10">
+          {/* types */}
+          <Section
+            title="All Car Types"
+            data={types}
+            type="type"
+            handleChange={handleChange}
+            token={token}
+            currentUser={currentUserId}
+            currentUserRole={currentUserRole}
+          />
+
+          {/* brands */}
+          <Section
+            title="All Car Brands"
+            data={brands}
+            type="brand"
+            handleChange={handleChange}
+            token={token}
+            currentUser={currentUserId}
+            currentUserRole={currentUserRole}
+          />
+
+          {/* cars */}
+          <Section
+            title="All Cars"
+            data={cars}
+            type="car"
+            brands={brands}
+            types={types}
+            handleChange={handleChange}
+            token={token}
+            currentUser={currentUserId}
+            currentUserRole={currentUserRole}
+          />
+
+          {/* users */}
+          <Section
+            title="All Users"
+            data={users}
+            type="user"
+            handleChange={handleChange}
+            token={token}
+            currentUser={currentUserId}
+            currentUserRole={currentUserRole}
+          />
+
+          {/* comments */}
+          <Section
+            title="All Comments"
+            data={comments}
+            type="comment"
+            handleChange={handleChange}
+            token={token}
+            currentUser={currentUserId}
+            currentUserRole={currentUserRole}
+          />
+        </div>
       </div>
-
-      <div>
-        <DropdownMenu>
-          <DropdownMenuTrigger className="text-white">
-            Filter
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem onSelect={() => handleSortType("name")}>
-              Name
-            </DropdownMenuItem>
-            <DropdownMenuItem onSelect={() => handleSortType("latest")}>
-              Recently added
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-
-      <div className="px-10">
-        {/* types */}
-        <Section
-          title="All Car Types"
-          data={types}
-          type="type"
-          handleChange={handleChange}
-          token={token}
-          currentUser={currentUserId}
-          currentUserRole={currentUserRole}
-        />
-
-        {/* brands */}
-        <Section
-          title="All Car Brands"
-          data={brands}
-          type="brand"
-          handleChange={handleChange}
-          token={token}
-          currentUser={currentUserId}
-          currentUserRole={currentUserRole}
-        />
-
-        {/* cars */}
-        <Section
-          title="All Cars"
-          data={cars}
-          type="car"
-          brands={brands}
-          types={types}
-          handleChange={handleChange}
-          token={token}
-          currentUser={currentUserId}
-          currentUserRole={currentUserRole}
-        />
-
-        {/* users */}
-        <Section
-          title="All Users"
-          data={users}
-          type="user"
-          handleChange={handleChange}
-          token={token}
-          currentUser={currentUserId}
-          currentUserRole={currentUserRole}
-        />
-
-        {/* comments */}
-        <Section
-          title="All Comments"
-          data={comments}
-          type="comment"
-          handleChange={handleChange}
-          token={token}
-          currentUser={currentUserId}
-          currentUserRole={currentUserRole}
-        />
-      </div>
-    </>
+    </div>
   ) : (
     <>
       <div className="px-5 flex flex-col items-center justify-center">

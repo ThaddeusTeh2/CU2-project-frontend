@@ -18,14 +18,30 @@ import {
 import Header from "@/components/Header";
 import { Link } from "react-router-dom";
 
+import { getCarsAdmin } from "@/utils/api_car";
+import { useEffect, useState } from "react";
+import { getAllUsers } from "@/utils/api_user";
+import { overview } from "@/utils/api_review";
+
 export default function Home() {
+  const [over_view, setOverview] = useState([]);
+
+  //get all cars
+  useEffect(() => {
+    overview()
+      .then((data) => setOverview(data))
+      .catch((error) => console.error(error));
+  }, []);
+
+  console.log(over_view);
+
   return (
     <>
       <div className="flex flex-col items-center justify-center">
         {/* about us & carousel */}
         <Header />
         <div className="container py-5">
-          <div className="grid grid-cols-3 gap-2 mb-2">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-2 mb-2">
             <div className="col-span-1 justify-center p-1 ">
               <Card className="h-full flex flex-col justify-between items-center p-8 bg-gradient-to-r from-neutral-400 to-stone-500 text-white shadow-xl rounded-xl hover:shadow-2xl transition-all">
                 <CardHeader className="text-center">
@@ -61,7 +77,7 @@ export default function Home() {
                 </CardContent>
               </Card>
             </div>
-            <div className="col-span-2 justify-center">
+            <div className="col-span-1 lg:col-span-2 justify-center">
               <Carousel
                 plugins={[
                   Autoplay({
@@ -131,7 +147,7 @@ export default function Home() {
             </CardContent>
           </Card>
           {/* end */}
-          <div className="grid grid-cols-2 gap-4 mt-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
             {/* explore */}
             <Card className="h-full text-center flex flex-col justify-between items-center p-6 bg-gradient-to-r from-neutral-400 to-stone-500 text-white shadow-lg">
               <CardHeader>
@@ -162,8 +178,12 @@ export default function Home() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="flex flex-col items-center">
-                <p className="text-4xl font-bold ">Cars: 39</p>
-                <p className="text-2xl font-bold mt-2">Users: 1200+</p>
+                <p className="text-4xl font-bold ">
+                  Cars: {over_view.cars?.length || 0}
+                </p>
+                <p className="text-2xl font-bold mt-2">
+                  Users: {over_view.users?.length || 0}
+                </p>
               </CardContent>
             </Card>
           </div>

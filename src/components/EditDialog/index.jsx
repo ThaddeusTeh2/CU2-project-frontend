@@ -32,6 +32,7 @@ import { editComment } from "@/utils/api_comment";
 import { updateUser } from "@/utils/api_user";
 
 import { toast } from "sonner";
+import { Textarea } from "../ui/textarea";
 
 //params from the section component (data = item itself, type = name for d item, handleChange to refresh upon change)
 export default function EditDialog({
@@ -223,6 +224,16 @@ export default function EditDialog({
                 </Command>
               </PopoverContent>
             </Popover>
+          ) : (type == "car" && field == "description") ||
+            (type == "comment" && field == "content") ? (
+            <Textarea
+              key={field}
+              name={field}
+              placeholder={"Update " + field}
+              value={form[field]}
+              onChange={handleFormChange}
+              className="my-2"
+            />
           ) : (
             <Input
               key={field}

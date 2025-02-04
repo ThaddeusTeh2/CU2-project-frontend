@@ -27,7 +27,7 @@ export default function Header() {
           <div>
             <Button
               variant="solid"
-              className=" text-white bg-black px-6 py-3 rounded-full shadow-md  transition-all duration-300 mx-1"
+              className=" text-white bg-black px-6 py-3 rounded-full shadow-md  transition-all duration-300 mx-1 my-1"
               disabled={isActive("/") ? true : false}
               onClick={() => {
                 navigate("/");
@@ -38,7 +38,7 @@ export default function Header() {
             {isUserLoggedIn(cookies) && (
               <Button
                 variant="solid"
-                className="text-white bg-black px-6 py-3 rounded-full shadow-md transition-all duration-300 mx-1"
+                className="text-white bg-black px-6 py-3 rounded-full shadow-md transition-all duration-300 mx-1 my-1"
                 disabled={isActive("/dashboard")}
                 onClick={() => {
                   navigate("/dashboard");
@@ -50,10 +50,10 @@ export default function Header() {
           </div>
         </div>
         <div className="flex">
-          <div flex flex-row>
+          <div className="flex flex-row justify-right">
             {isUserLoggedIn(cookies) ? (
               <>
-                <div className="mx-5">
+                <div className="mx-5 flex flex-row items-center justify-right">
                   Logged in as: {userName}
                   <Button
                     variant="solid"

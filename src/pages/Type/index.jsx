@@ -15,12 +15,36 @@ import { Input } from "@/components/ui/input";
 
 export default function Type() {
   const [types, setTypes] = useState([]);
+  const [oritypes, setOriTypes] = useState([]);
+  const [search, setSearch] = useState("");
+  const [sortType, setSortType] = useState("latest");
 
   useEffect(() => {
-    getTypes().then((data) => {
+    getTypes(sortType).then((data) => {
+      setOriTypes(data);
       setTypes(data);
     });
-  }, []);
+  }, [sortType]);
+
+  const handleChange = (event) => {
+    setSearch(event.target.value);
+  };
+
+  const handleSortType = (type) => {
+    setSortType(type);
+  };
+
+  useEffect(() => {
+    if (search.trim() === "") {
+      setTypes(oritypes);
+    } else {
+      setTypes(
+        oritypes.filter((type) =>
+          type.name.toLowerCase().includes(search.trim().toLowerCase())
+        )
+      );
+    }
+  }, [search, oritypes]);
 
   return (
     <>
@@ -32,8 +56,11 @@ export default function Type() {
             </div>
             <div className="mb-5 flex place-content-between">
               <div className="flex w-full max-w-sm items-center space-x-2">
-                <Input type="text" placeholder="Search" />
-                <Button type="submit">Go</Button>
+                <Input
+                  type="text"
+                  placeholder="Search"
+                  onChange={handleChange}
+                />
               </div>
               <div>
                 <DropdownMenu>
@@ -41,8 +68,12 @@ export default function Type() {
                     Filter
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
-                    <DropdownMenuItem>Name</DropdownMenuItem>
-                    <DropdownMenuItem>Recently added</DropdownMenuItem>
+                    <DropdownMenuItem onSelect={() => handleSortType("name")}>
+                      Name
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onSelect={() => handleSortType("latest")}>
+                      Recently added
+                    </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
