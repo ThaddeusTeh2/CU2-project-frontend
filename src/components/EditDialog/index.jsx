@@ -30,6 +30,7 @@ import { editType } from "@/utils/api_type";
 import { editCar } from "@/utils/api_car";
 import { editComment } from "@/utils/api_comment";
 import { updateUser } from "@/utils/api_user";
+import { uploadImage } from "@/utils/api_image";
 
 import { toast } from "sonner";
 import { Textarea } from "../ui/textarea";
@@ -78,6 +79,13 @@ export default function EditDialog({
 
     //TODO remove this after debug
     console.log(form);
+  };
+
+  const handleImageUpload = async (files) => {
+    if (files && files[0]) {
+      const { image_url = "" } = await uploadImage(files[0]);
+      setForm({ ...form, image: image_url });
+    }
   };
 
   // handle form submission
@@ -232,6 +240,15 @@ export default function EditDialog({
               placeholder={"Update " + field}
               value={form[field]}
               onChange={handleFormChange}
+              className="my-2"
+            />
+          ) : type == "car" && field == "image" ? (
+            <Input
+              key={field}
+              name={field}
+              type="file"
+              placeholder={"Update " + field}
+              onChange={(e) => handleImageUpload(e.target.files)}
               className="my-2"
             />
           ) : (

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getCar } from "@/utils/api_car";
 import { getComments, addComment } from "@/utils/api_comment";
 import { useCookies } from "react-cookie";
+import { API_URL } from "../../../constants";
 
 import {
   Card,
@@ -14,6 +15,7 @@ import { Input } from "@/components/ui/input";
 
 import { Button } from "@/components/ui/button";
 import { addLike, deleteLike } from "@/utils/api_like";
+import { getImage } from "@/utils/api_image";
 
 export default function Car() {
   const [car, setCar] = useState([]);
@@ -34,6 +36,7 @@ export default function Car() {
       setCar(data);
       setLiked(data.like.includes(token._id));
     });
+
     if (carId) {
       getComments(carId, "latest").then((data) => {
         console.log(data);
@@ -48,6 +51,7 @@ export default function Car() {
     }
   }, [liked, change]);
 
+  console.log(car.image);
   console.log(liked);
 
   const handleCommentInput = async (event) => {
@@ -114,28 +118,47 @@ export default function Car() {
     );
   };
 
+  console.log(`${API_URL}/${car.image}`);
+
   return (
     <>
       <div className="grid grid-cols-2 gap-4 mt-6">
-        <Card className="h-full text-center flex flex-col justify-between items-center p-6 bg-gradient-to-r from-neutral-400 to-stone-500 text-white shadow-lg">
-          <CardHeader>
-            <CardTitle className="text-3xl font-bold">{car.name}</CardTitle>
-            <CardDescription className="mt-2 text-lg text-white">
-              {car.description}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button
-              variant="solid"
-              className=" text-white px-6 py-3 rounded-full shadow-md  transition-all duration-300"
-              onClick={(event) =>
-                liked ? handleUnlike(event) : handleLike(event)
-              }
-            >
-              {liked ? "Unlike" : "Like"}
-            </Button>
-            <p>{car.like ? car.like.length : 0}</p>
-          </CardContent>
+        <Card
+          className="h-full text-center flex flex-col justify-between items-center p-6 text-white shadow-lg relative"
+          style={{
+            backgroundImage: `url(${API_URL}/${car.image})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+          }}
+        >
+          {/* Dark overlay */}
+          <div
+            className="absolute inset-0 bg-black opacity-50 rounded-lg"
+            style={{ zIndex: 1 }}
+          ></div>
+
+          {/* Card content */}
+          <div className="relative z-10">
+            <CardHeader>
+              <CardTitle className="text-3xl font-bold">{car.name}</CardTitle>
+              <CardDescription className="mt-2 text-lg text-white">
+                {car.description}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button
+                variant="solid"
+                className="text-white px-6 py-3 rounded-full shadow-md transition-all duration-300"
+                onClick={(event) =>
+                  liked ? handleUnlike(event) : handleLike(event)
+                }
+              >
+                {liked ? "Unlike" : "Like"}
+              </Button>
+              <p>{car.like ? car.like.length : 0}</p>
+            </CardContent>
+          </div>
         </Card>
 
         <Card className="h-full text-center flex flex-col justify-between items-center p-6 bg-gray-100 shadow-lg hover:shadow-xl transition">

@@ -8,9 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
-
 import { Check, ChevronsUpDown } from "lucide-react";
-
 import {
   Command,
   CommandEmpty,
@@ -29,92 +27,64 @@ import {
 import { addBrand, getBrands } from "@/utils/api_brand";
 import { addType, getTypes } from "@/utils/api_type";
 import { addCar } from "@/utils/api_car";
-
+import { uploadImage } from "@/utils/api_image";
 import { toast } from "sonner";
 
-//params from the section component (data = item itself, type = name for d item, handleChange to refresh upon change)
 export default function AddDialog({ type, handleChange, token }) {
-  // form state based on item data
   const [form, setForm] = useState(() => {
     if (type === "car") {
-      return { name: "", description: "", type: "", brand: "" };
+      return { name: "", description: "", type: "", brand: "", image: "" };
     } else if (type === "brand" || type === "type") {
       return { name: "" };
     }
-    // in case value returned from type is sus the form will just be empty n not j break
     return {};
   });
 
-  //by default the dialog is closed yes
   const [dialogOpen, setDialogOpen] = useState(false);
-  //state to follow if the popover open
   const [popoverOpen, setPopoverOpen] = useState(null);
   const [brands, setBrands] = useState([]);
   const [types, setTypes] = useState([]);
   const [change, setChange] = useState(false);
 
-  //get all brands
   useEffect(() => {
-    getBrands()
-      .then((data) => setBrands([...data]))
-      .catch((error) => console.error(error));
+    getBrands().then(setBrands).catch(console.error);
   }, [change]);
 
-  //get all types
   useEffect(() => {
-    getTypes()
-      .then((data) => setTypes([...data]))
-      .catch((error) => console.error(error));
+    getTypes().then(setTypes).catch(console.error);
   }, [change]);
 
-  //handle input changes
   const handleFormChange = (e) => {
-    //the form = form + entity value overrides the entity name
     setForm({ ...form, [e.target.name]: e.target.value });
-
-    //TODO remove this after debug
-    console.log(form);
   };
 
-  // handle form submission
+  const handleImageUpload = async (files) => {
+    if (files && files[0]) {
+      const { image_url = "" } = await uploadImage(files[0]);
+      setForm({ ...form, image: image_url });
+    }
+  };
+
   const handleSubmit = async () => {
-    // to make sure that all the inputs are not empty :D
-    // x of x basically is for loop shorthand, in this case we are looping thru every column of the form n checking if they are filled or not
     for (const column of Object.keys(form)) {
-      //make sure that user cannot trolling submit empty string (.trim remove white space frm front & back)
-      if (form[column].trim() == "") {
-        return;
-      } else {
-        //make sure that user cannot trolling spam spaces
-        form[column] = form[column].trim();
-      }
+      if (form[column].trim() === "") return;
+      form[column] = form[column].trim();
     }
 
-    //idk how to optimize this enjoy if-else family tree to determine which function gets used in the component
     try {
-      // if the type(name of the item) equals type(represent 'car body type') rizz the addType function from (API-->Dashboard-->Section-->AddDialog *you are here*)
       if (type === "type") {
-        const response = await addType(form.name, token);
-        console.log(response);
-        //if not, if the type(name of the item) equals brand(car brand) rizz the addBrand function from (API-->Dashboard-->Section-->AddDialog *you are here*)
-      } else if (type == "brand") {
-        const response = await addBrand(form.name, token);
-        console.log(response);
-        //if not, if the type(name of the item) equals car, rizz the addBrand function from (API-->Dashboard-->Section-->AddDialog *you are here*)
-      } else if (type == "car") {
-        const response = await addCar(form, token);
-        console.log(response);
+        await addType(form.name, token);
+      } else if (type === "brand") {
+        await addBrand(form.name, token);
+      } else if (type === "car") {
+        await addCar(form, token);
       }
       handleChange();
-      setForm(() => {
-        if (type === "car") {
-          return { name: "", description: "", type: "", brand: "" };
-        } else if (type === "brand" || type === "type") {
-          return { name: "" };
-        }
-        // in case value returned from type is sus the form will just be empty n not break
-        return {};
-      });
+      setForm(
+        type === "car"
+          ? { name: "", description: "", type: "", brand: "", image: "" }
+          : { name: "" }
+      );
       setDialogOpen(false);
     } catch (error) {
       console.error(error);
@@ -138,20 +108,17 @@ export default function AddDialog({ type, handleChange, token }) {
           <DialogTitle>Add {type}</DialogTitle>
         </DialogHeader>
 
-        {/* here i map d object's keys(name, description, brandid type id all dat) from the form */}
         {Object.keys(form).map((field) =>
-          // we only want to show this popup when we map the car and the column got brand and type
           type === "car" && (field === "brand" || field === "type") ? (
             <Popover
               key={field}
-              open={popoverOpen === field} // Only open for the active field
+              open={popoverOpen === field}
               onOpenChange={(isOpen) => setPopoverOpen(isOpen ? field : null)}
             >
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
                   role="combobox"
-                  aria-expanded={open}
                   className="w-[200px] justify-between my-2"
                 >
                   {form[field]
@@ -175,7 +142,6 @@ export default function AddDialog({ type, handleChange, token }) {
                           onSelect={(currentValue) => {
                             setForm({ ...form, [field]: currentValue });
                             setPopoverOpen(false);
-                            console.log(form);
                           }}
                         >
                           {item.name}
@@ -186,13 +152,19 @@ export default function AddDialog({ type, handleChange, token }) {
                 </Command>
               </PopoverContent>
             </Popover>
-          ) : (
-            //otherwise show
+          ) : type === "car" && field === "image" ? (
             <Input
               key={field}
               name={field}
-              placeholder={"Enter " + field}
-              //we set the value of the input to the current value so it prefill the input box :D
+              type="file"
+              className="my-2"
+              onChange={(e) => handleImageUpload(e.target.files)}
+            />
+          ) : (
+            <Input
+              key={field}
+              name={field}
+              placeholder={`Enter ${field}`}
               value={form[field]}
               onChange={handleFormChange}
               className="my-2"
