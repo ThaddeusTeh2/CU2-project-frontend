@@ -3,10 +3,13 @@ import { toast } from "sonner";
 import { API_URL } from "../../constants";
 
 //get all brands
-export const getBrands = async (sortType) => {
+export const getBrands = async (sortType, search) => {
   try {
     const response = await axios.get(API_URL + "/brand", {
-      params: { sortType: sortType === "latest" ? "createdAt" : sortType },
+      params: {
+        sortType: sortType === "latest" ? "createdAt" : sortType,
+        search: search?.trim() || "all",
+      },
     });
     return response.data;
   } catch (error) {

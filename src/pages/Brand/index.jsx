@@ -24,11 +24,11 @@ export default function Brand() {
   const [sortType, setSortType] = useState("latest");
 
   useEffect(() => {
-    getBrands(sortType).then((data) => {
+    getBrands(sortType, search).then((data) => {
       setOriBrands(data);
       setBrands(data);
     });
-  }, [sortType]);
+  }, [sortType, search]);
 
   const handleChange = (event) => {
     setSearch(event.target.value);
@@ -37,18 +37,6 @@ export default function Brand() {
   const handleSortType = (type) => {
     setSortType(type);
   };
-
-  useEffect(() => {
-    if (search.trim() === "") {
-      setBrands(oribrands);
-    } else {
-      setBrands(
-        oribrands.filter((brand) =>
-          brand.name.toLowerCase().includes(search.trim().toLowerCase())
-        )
-      );
-    }
-  }, [search, oribrands]);
 
   return (
     <>
@@ -93,15 +81,19 @@ export default function Brand() {
                     <CardHeader>
                       <CardTitle>{brand.name}</CardTitle>
                     </CardHeader>
-                    <CardContent className="justify-center content-center">
-                      <Button
-                        className="justify-center content-center"
-                        asChild
-                        variant="outline"
-                        onClick={() => localStorage.setItem("brand", brand._id)}
-                      >
-                        <Link to="/type">View</Link>
-                      </Button>
+                    <CardContent className="justify-center items-center">
+                      <div className="flex justify-center items-center pt-5">
+                        <Button
+                          className="justify-center content-center"
+                          asChild
+                          variant="outline"
+                          onClick={() =>
+                            localStorage.setItem("brand", brand._id)
+                          }
+                        >
+                          <Link to="/type">View</Link>
+                        </Button>
+                      </div>
                     </CardContent>
                   </Card>
                 ))

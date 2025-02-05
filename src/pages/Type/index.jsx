@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Header from "@/components/Header";
+
 //import api
 import { getTypes } from "@/utils/api_type";
 
@@ -20,11 +22,11 @@ export default function Type() {
   const [sortType, setSortType] = useState("latest");
 
   useEffect(() => {
-    getTypes(sortType).then((data) => {
+    getTypes(sortType, search).then((data) => {
       setOriTypes(data);
       setTypes(data);
     });
-  }, [sortType]);
+  }, [sortType, search]);
 
   const handleChange = (event) => {
     setSearch(event.target.value);
@@ -34,21 +36,11 @@ export default function Type() {
     setSortType(type);
   };
 
-  useEffect(() => {
-    if (search.trim() === "") {
-      setTypes(oritypes);
-    } else {
-      setTypes(
-        oritypes.filter((type) =>
-          type.name.toLowerCase().includes(search.trim().toLowerCase())
-        )
-      );
-    }
-  }, [search, oritypes]);
-
   return (
     <>
-      <div className="flex justify-center">
+      <div className="flex flex-col px-10 justify-center">
+        <Header />
+
         <div className="container py-5">
           <div className="grid grid-rows-3">
             <div className="mb-5">
@@ -88,15 +80,17 @@ export default function Type() {
                     <CardHeader>
                       <CardTitle>{type.name}</CardTitle>
                     </CardHeader>
-                    <CardContent className="justify-center content-center">
-                      <Button
-                        className="justify-center content-center"
-                        asChild
-                        variant="outline"
-                        onClick={() => localStorage.setItem("type", type._id)}
-                      >
-                        <Link to="/list">View</Link>
-                      </Button>
+                    <CardContent className="justify-center items-center">
+                      <div className="flex justify-center items-center pt-5">
+                        <Button
+                          className="justify-center content-center"
+                          asChild
+                          variant="outline"
+                          onClick={() => localStorage.setItem("type", type._id)}
+                        >
+                          <Link to="/list">View</Link>
+                        </Button>
+                      </div>
                     </CardContent>
                   </Card>
                 ))

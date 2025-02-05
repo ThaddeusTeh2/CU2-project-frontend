@@ -3,7 +3,7 @@ import { toast } from "sonner";
 import { API_URL } from "../../constants";
 
 //get all
-export const getCars = async (type, brand, sortType) => {
+export const getCars = async (type, brand, sortType, search) => {
   try {
     const response = await axios.get(API_URL + "/car", {
       params: {
@@ -12,6 +12,7 @@ export const getCars = async (type, brand, sortType) => {
         sortType: sortType === "latest" ? "createdAt" : sortType,
         // 'latest' --> 'createdAt'
         // 'name' --> 'name'
+        search: search?.trim() || "all",
       },
     });
 

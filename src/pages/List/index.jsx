@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Header from "@/components/Header";
 
 //import api
 import { getCars } from "@/utils/api_car";
@@ -30,12 +31,12 @@ export default function List() {
     const brandId = localStorage.getItem("brand");
     const typeId = localStorage.getItem("type");
 
-    getCars(typeId, brandId, sortType).then((data) => {
+    getCars(typeId, brandId, sortType, search).then((data) => {
       console.log(data);
       setOricars(data);
       setCars(data);
     });
-  }, [sortType]);
+  }, [sortType, search]);
 
   const handleChange = (event) => {
     setSearch(event.target.value);
@@ -45,21 +46,10 @@ export default function List() {
     setSortType(type);
   };
 
-  useEffect(() => {
-    if (search.trim() === "") {
-      setCars(oricars);
-    } else {
-      setCars(
-        oricars.filter((car) =>
-          car.name.toLowerCase().includes(search.trim().toLowerCase())
-        )
-      );
-    }
-  }, [search, oricars]);
-
   return (
     <>
-      <div className="flex justify-center">
+      <div className="flex flex-col px-10 justify-center">
+        <Header />
         <div className="container py-5">
           <div className="grid grid-rows-3">
             <div className="mb-5">
@@ -100,17 +90,19 @@ export default function List() {
                       <CardTitle>{car.name}</CardTitle>
                       <CardDescription>{car.description}</CardDescription>
                     </CardHeader>
-                    <CardContent className="justify-center content-center">
-                      <Button
-                        asChild
-                        className="justify-center content-center"
-                        variant="outline"
-                        onClick={() => {
-                          localStorage.setItem("car", car._id);
-                        }}
-                      >
-                        <Link to="/car">View</Link>
-                      </Button>
+                    <CardContent className="justify-center items-center">
+                      <div className="flex justify-center items-center pt-5">
+                        <Button
+                          asChild
+                          className="justify-center content-center"
+                          variant="outline"
+                          onClick={() => {
+                            localStorage.setItem("car", car._id);
+                          }}
+                        >
+                          <Link to="/car">View</Link>
+                        </Button>
+                      </div>
                     </CardContent>
                   </Card>
                 ))
