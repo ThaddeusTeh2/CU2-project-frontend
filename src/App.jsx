@@ -12,6 +12,7 @@ import List from "./pages/List";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Type from "./pages/Type";
+import Explore from "./pages/Explore";
 
 function App() {
   return (
@@ -23,6 +24,8 @@ function App() {
             <Route path="/type" element={<Type />} />
             <Route path="/brand" element={<Brand />} />
             <Route path="/list" element={<List />} />
+            <Route path="/explore" element={<Explore />} />
+
             <Route path="/car" element={<Car />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/login" element={<Login />} />

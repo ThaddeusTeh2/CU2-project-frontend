@@ -96,7 +96,7 @@ export default function Dashboard() {
         <div className="flex flex-row-reverse mx-5">
           <DropdownMenu>
             <DropdownMenuTrigger className="text-white">
-              Filter
+              Sort
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem onSelect={() => handleSortType("name")}>

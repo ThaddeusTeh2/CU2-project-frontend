@@ -42,7 +42,7 @@ export default function Type() {
         <Header />
 
         <div className="container py-5">
-          <div className="grid grid-rows-3">
+          <div className="">
             <div className="mb-5">
               <h1>What's your type?</h1>
             </div>
@@ -57,7 +57,7 @@ export default function Type() {
               <div>
                 <DropdownMenu>
                   <DropdownMenuTrigger className="text-white">
-                    Filter
+                    Sort
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
                     <DropdownMenuItem onSelect={() => handleSortType("name")}>

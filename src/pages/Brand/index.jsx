@@ -42,12 +42,12 @@ export default function Brand() {
     <>
       <div className="flex flex-col px-10 justify-center">
         <Header />
-        <div className="container py-5">
-          <div className="grid grid-rows-3">
+        <div className="container">
+          <div className="">
             <div className="mb-5">
               <h1>Pick a brand, any brand.</h1>
             </div>
-            <div className="mb-5 flex place-content-between">
+            <div className="flex items-center justify-between mb-5">
               <div className="flex w-full max-w-sm items-center space-x-2">
                 <Input
                   type="text"
@@ -58,7 +58,7 @@ export default function Brand() {
               <div>
                 <DropdownMenu>
                   <DropdownMenuTrigger className="text-white">
-                    Filter
+                    Sort
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
                     <DropdownMenuItem onSelect={() => handleSortType("name")}>
@@ -71,12 +71,12 @@ export default function Brand() {
                 </DropdownMenu>
               </div>
             </div>
-            <div className="grid gap-4">
+            <div className="grid ">
               {brands.length > 0 ? (
                 brands.map((brand) => (
                   <Card
                     key={brand.id}
-                    className="flex flex-row place-content-between"
+                    className="flex flex-row place-content-between mb-5"
                   >
                     <CardHeader>
                       <CardTitle>{brand.name}</CardTitle>

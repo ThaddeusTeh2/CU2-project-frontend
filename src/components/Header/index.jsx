@@ -9,11 +9,10 @@ export default function Header() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // clear the cookies
     removeCookie("currentUser");
-    // redirect the user back to login page
     navigate("/");
   };
+
   //stuff to display current logged in user
   const currentUser = cookies.currentUser;
   const userName = currentUser?.name;
@@ -21,76 +20,69 @@ export default function Header() {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <>
-      <div className="container flex place-content-between w-full m-5">
-        <div>
-          <div>
+    <div className="container flex flex-col lg:flex-row items-center justify-between w-full p-5">
+      <div className="flex flex-wrap justify-center gap-2 lg:gap-4">
+        <Button
+          variant="solid"
+          className="text-white bg-black px-6 py-3 rounded-full shadow-md transition-all duration-300"
+          disabled={isActive("/")}
+          onClick={() => navigate("/")}
+        >
+          Home
+        </Button>
+        <Button
+          variant="solid"
+          className="text-white bg-black px-6 py-3 rounded-full shadow-md transition-all duration-300"
+          disabled={isActive("/explore")}
+          onClick={() => navigate("/explore")}
+        >
+          Explore
+        </Button>
+        {isUserLoggedIn(cookies) && (
+          <Button
+            variant="solid"
+            className="text-white bg-black px-6 py-3 rounded-full shadow-md transition-all duration-300"
+            disabled={isActive("/dashboard")}
+            onClick={() => navigate("/dashboard")}
+          >
+            Dashboard
+          </Button>
+        )}
+      </div>
+
+      <div className="flex flex-col lg:flex-row items-center gap-2 lg:gap-4 mt-4 lg:mt-0">
+        {isUserLoggedIn(cookies) ? (
+          <div className="flex items-center gap-4">
+            <span className="text-center">Logged in as: {userName}</span>
             <Button
               variant="solid"
-              className=" text-white bg-black px-6 py-3 rounded-full shadow-md  transition-all duration-300 mx-1 my-1"
-              disabled={isActive("/") ? true : false}
-              onClick={() => {
-                navigate("/");
-              }}
+              className="text-white bg-red-600 px-6 py-3 rounded-full shadow-md transition-all duration-300"
+              onClick={handleLogout}
             >
-              Home
+              Logout
             </Button>
-            {isUserLoggedIn(cookies) && (
-              <Button
-                variant="solid"
-                className="text-white bg-black px-6 py-3 rounded-full shadow-md transition-all duration-300 mx-1 my-1"
-                disabled={isActive("/dashboard")}
-                onClick={() => {
-                  navigate("/dashboard");
-                }}
-              >
-                Dashboard
-              </Button>
-            )}
           </div>
-        </div>
-        <div className="flex">
-          <div className="flex flex-row justify-right">
-            {isUserLoggedIn(cookies) ? (
-              <>
-                <div className="mx-5 flex flex-row items-center justify-right">
-                  Logged in as: {userName}
-                  <Button
-                    variant="solid"
-                    className="text-white bg-red-600 px-6 py-3 rounded-full shadow-md transition-all duration-300 mx-1"
-                    onClick={handleLogout}
-                  >
-                    Logout
-                  </Button>
-                </div>
-              </>
-            ) : (
-              <>
-                <Button
-                  variant="solid"
-                  className="text-white bg-black px-6 py-3 rounded-full shadow-md transition-all duration-300 mx-1"
-                  disabled={isActive("/login")}
-                  onClick={() => {
-                    navigate("/login");
-                  }}
-                >
-                  Login{" "}
-                </Button>
-                <Button
-                  variant="solid"
-                  className="text-white bg-black px-6 py-3 rounded-full shadow-md transition-all duration-300 mx-1"
-                  disabled={isActive("/signup")}
-                  onClick={() => {
-                    navigate("/signup");
-                  }}
-                >
-                  Sign Up
-                </Button>
-              </>
-            )}
+        ) : (
+          <div className="flex gap-2 lg:gap-4">
+            <Button
+              variant="solid"
+              className="text-white bg-black px-6 py-3 rounded-full shadow-md transition-all duration-300"
+              disabled={isActive("/login")}
+              onClick={() => navigate("/login")}
+            >
+              Login
+            </Button>
+            <Button
+              variant="solid"
+              className="text-white bg-black px-6 py-3 rounded-full shadow-md transition-all duration-300"
+              disabled={isActive("/signup")}
+              onClick={() => navigate("/signup")}
+            >
+              Sign Up
+            </Button>
           </div>
-        </div>
+        )}
       </div>
-    </>
+    </div>
   );
 }

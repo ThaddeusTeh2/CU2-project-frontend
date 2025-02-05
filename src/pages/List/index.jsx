@@ -51,7 +51,7 @@ export default function List() {
       <div className="flex flex-col px-10 justify-center">
         <Header />
         <div className="container py-5">
-          <div className="grid grid-rows-3">
+          <div className="">
             <div className="mb-5">
               <h1>Anything interesting?</h1>
             </div>
@@ -66,7 +66,7 @@ export default function List() {
               <div>
                 <DropdownMenu>
                   <DropdownMenuTrigger className="text-white">
-                    Filter
+                    Sort
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
                     <DropdownMenuItem onSelect={() => handleSortType("name")}>
@@ -88,7 +88,11 @@ export default function List() {
                   >
                     <CardHeader>
                       <CardTitle>{car.name}</CardTitle>
-                      <CardDescription>{car.description}</CardDescription>
+                      <CardDescription>
+                        {car.description.length > 25
+                          ? `${car.description.substring(0, 25)}...`
+                          : car.description}
+                      </CardDescription>{" "}
                     </CardHeader>
                     <CardContent className="justify-center items-center">
                       <div className="flex justify-center items-center pt-5">
