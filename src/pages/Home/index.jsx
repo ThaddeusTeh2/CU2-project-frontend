@@ -22,6 +22,7 @@ import { getCarsAdmin } from "@/utils/api_car";
 import { useEffect, useState } from "react";
 import { getAllUsers } from "@/utils/api_user";
 import { overview } from "@/utils/api_review";
+import { isUserLoggedIn } from "@/utils/api_auth";
 
 export default function Home() {
   const [over_view, setOverview] = useState([]);
@@ -32,6 +33,12 @@ export default function Home() {
       .then((data) => setOverview(data))
       .catch((error) => console.error(error));
   }, []);
+
+  const images = [
+    "../../../images/mclaren.jpg",
+    "../../../images/porsche.jpg",
+    "../../../images/supra.jpg",
+  ];
 
   console.log(over_view);
 
@@ -54,26 +61,27 @@ export default function Home() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="mt-6 space-y-6 flex flex-col items-center">
-                  {/* img here ltr maybe? */}
-                  <div className="w-24 h-24 rounded p-2 mb-4">
-                    <img
-                      src="https://i.pinimg.com/736x/5e/95/58/5e9558a28711f3517fa7004e65d203d7.jpg"
-                      alt="icon"
-                      className="w-full h-full rounded-full object-contain"
-                    />
-                  </div>
-
                   <p className="text-lg text-gray-200 font-semibold text-center">
                     Join a growing community of passionate car lovers.
                   </p>
 
-                  <Button
-                    variant="solid"
-                    className=" text-white bg-black px-6 py-3 rounded-full shadow-md  transition-all duration-300"
-                    asChild
-                  >
-                    <Link to="/signup">Join Us Today</Link>
-                  </Button>
+                  {!isUserLoggedIn ? (
+                    <Button
+                      variant="solid"
+                      className="text-white bg-black px-6 py-3 rounded-full shadow-md transition-all duration-300"
+                      asChild
+                    >
+                      <Link to="/signup">Join Us Today</Link>
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="solid"
+                      className="text-white bg-black px-6 py-3 rounded-full shadow-md transition-all duration-300"
+                      asChild
+                    >
+                      <Link to="/brand">Start the Experience</Link>
+                    </Button>
+                  )}
                 </CardContent>
               </Card>
             </div>
@@ -92,14 +100,17 @@ export default function Home() {
                 className="w-full h-full basis-1/3"
               >
                 <CarouselContent>
-                  {Array.from({ length: 5 }).map((_, index) => (
-                    <CarouselItem key={index}>
+                  {images.map((image, idx) => (
+                    <CarouselItem key={idx}>
                       <div className="p-1">
                         <Card>
                           <CardContent className="flex aspect-video items-center justify-center p-6">
-                            <span className="text-4xl font-semibold">
-                              {index + 1}
-                            </span>
+                            <img
+                              src={image}
+                              alt={`Image ${idx + 1}`}
+                              className="w-full h-full object-cover"
+                              rounded
+                            />
                           </CardContent>
                         </Card>
                       </div>
@@ -153,7 +164,7 @@ export default function Home() {
               <CardHeader>
                 <CardTitle className="text-3xl font-bold">Explore Us</CardTitle>
                 <CardDescription className="mt-2 text-lg text-white">
-                  Discover everything our website has to offer.
+                  Discover everything our website has to offer at a glance.
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -162,7 +173,7 @@ export default function Home() {
                   className=" text-white bg-black px-6 py-3 rounded-full shadow-md  transition-all duration-300"
                   asChild
                 >
-                  <Link to="/brand">Go</Link>
+                  <Link to="/explore">Go</Link>
                 </Button>
               </CardContent>
             </Card>

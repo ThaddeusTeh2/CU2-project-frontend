@@ -3,7 +3,7 @@ import { getCar } from "@/utils/api_car";
 import { getComments, addComment } from "@/utils/api_comment";
 import { useCookies } from "react-cookie";
 import { API_URL } from "../../../constants";
-
+import Header from "@/components/Header";
 import {
   Card,
   CardContent,
@@ -15,7 +15,6 @@ import { Input } from "@/components/ui/input";
 
 import { Button } from "@/components/ui/button";
 import { addLike, deleteLike } from "@/utils/api_like";
-import { getImage } from "@/utils/api_image";
 
 export default function Car() {
   const [car, setCar] = useState([]);
@@ -122,6 +121,7 @@ export default function Car() {
 
   return (
     <>
+      <Header />
       <div className="grid grid-cols-2 gap-4 mt-6">
         <Card
           className="h-full text-center flex flex-col justify-between items-center p-6 text-white shadow-lg relative"

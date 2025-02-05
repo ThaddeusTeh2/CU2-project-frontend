@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 import {
   Dialog,
   DialogContent,
@@ -7,7 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { ChevronsUpDown } from "lucide-react";
 
@@ -31,9 +33,11 @@ import { editCar } from "@/utils/api_car";
 import { editComment } from "@/utils/api_comment";
 import { updateUser } from "@/utils/api_user";
 import { uploadImage } from "@/utils/api_image";
+import { isAdmin } from "@/utils/api_auth";
 
 import { toast } from "sonner";
 import { Textarea } from "../ui/textarea";
+import { useCookies } from "react-cookie";
 
 //params from the section component (data = item itself, type = name for d item, handleChange to refresh upon change)
 export default function EditDialog({
@@ -69,8 +73,17 @@ export default function EditDialog({
   //by default the dialog is closed yes
   const [dialogOpen, setDialogOpen] = useState(false);
   const [popoverOpen, setPopoverOpen] = useState(null); // track open popover
+  const [cookies, removeCookie] = useCookies(["currentUser"]);
+  const navigate = useNavigate();
 
   const [change, setChange] = useState(false);
+
+  useEffect(() => {
+    if (!isAdmin(cookies)) {
+      toast.error("Naughty naughty");
+      navigate("/");
+    }
+  }, [cookies, navigate]);
 
   //handle input changes
   const handleFormChange = (e) => {

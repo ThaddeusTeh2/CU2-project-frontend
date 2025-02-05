@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 import {
   Dialog,
   DialogContent,
@@ -23,12 +25,15 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
+import { useCookies } from "react-cookie";
+
 //APIs
 import { addBrand, getBrands } from "@/utils/api_brand";
 import { addType, getTypes } from "@/utils/api_type";
 import { addCar } from "@/utils/api_car";
 import { uploadImage } from "@/utils/api_image";
 import { toast } from "sonner";
+import { isAdmin } from "@/utils/api_auth";
 
 export default function AddDialog({ type, handleChange, token }) {
   const [form, setForm] = useState(() => {
@@ -45,6 +50,15 @@ export default function AddDialog({ type, handleChange, token }) {
   const [brands, setBrands] = useState([]);
   const [types, setTypes] = useState([]);
   const [change, setChange] = useState(false);
+  const [cookies, removeCookie] = useCookies(["currentUser"]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isAdmin(cookies)) {
+      toast.error("Naughty naughty");
+      navigate("/");
+    }
+  }, [cookies, navigate]);
 
   useEffect(() => {
     getBrands().then(setBrands).catch(console.error);
