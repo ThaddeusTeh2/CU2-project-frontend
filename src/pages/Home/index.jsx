@@ -23,9 +23,11 @@ import { useEffect, useState } from "react";
 import { getAllUsers } from "@/utils/api_user";
 import { overview } from "@/utils/api_review";
 import { isUserLoggedIn } from "@/utils/api_auth";
+import { useCookies } from "react-cookie";
 
 export default function Home() {
   const [over_view, setOverview] = useState([]);
+  const [cookies] = useCookies(["currentUser"]);
 
   //get all cars
   useEffect(() => {
@@ -65,7 +67,7 @@ export default function Home() {
                     Join a growing community of passionate car lovers.
                   </p>
 
-                  {!isUserLoggedIn ? (
+                  {!isUserLoggedIn(cookies) ? (
                     <Button
                       variant="solid"
                       className="text-white bg-black px-6 py-3 rounded-full shadow-md transition-all duration-300"
