@@ -65,7 +65,7 @@ export default function Explore() {
 
   return (
     <>
-      <div className="flex flex-col justify-center">
+      <div className="flex flex-col px-10 justify-center">
         <Header />
         <div className="container py-5">
           <div className="">
