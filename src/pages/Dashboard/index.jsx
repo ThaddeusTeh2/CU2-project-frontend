@@ -5,6 +5,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { toast } from "sonner";
 
 //APIs
 import { getTypes } from "@/utils/api_type";
@@ -12,10 +13,12 @@ import { getBrands } from "@/utils/api_brand";
 import { getCarsAdmin } from "@/utils/api_car";
 import { getAllUsers } from "@/utils/api_user";
 import { getAllComments } from "@/utils/api_comment";
+import { isUserLoggedIn } from "@/utils/api_auth";
+import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
 
 import Header from "@/components/Header";
 import Section from "@/components/Section";
-import { useCookies } from "react-cookie";
 
 export default function Dashboard() {
   //states
@@ -25,8 +28,9 @@ export default function Dashboard() {
   const [users, setUsers] = useState([]);
   const [comments, setComments] = useState([]);
   const [sortType, setSortType] = useState("name");
+  const navigate = useNavigate();
 
-  const [cookies] = useCookies(["currentUser"]);
+  const [cookies, removeCookie] = useCookies(["currentUser"]);
 
   const [change, setChange] = useState(false);
 
@@ -34,6 +38,15 @@ export default function Dashboard() {
 
   const currentUserRole = cookies.currentUser?.role;
   const currentUserId = cookies.currentUser?._id;
+
+  //shaft ppl who force path
+  useEffect(() => {
+    if (!isUserLoggedIn(cookies)) {
+      toast.error("Naughty naughty");
+      removeCookie("currentUser");
+      navigate("/");
+    }
+  }, [cookies, navigate]);
 
   //get all types
   useEffect(() => {

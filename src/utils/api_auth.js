@@ -37,7 +37,8 @@ export const getCurrentUser = (cookies) => {
 
 //is user logged in?
 export const isUserLoggedIn = (cookies) => {
-  return getCurrentUser(cookies) ? true : false;
+  const user = getCurrentUser(cookies);
+  return user !== undefined && user !== null;
 };
 
 //he admin??
