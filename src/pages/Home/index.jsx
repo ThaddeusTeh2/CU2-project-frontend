@@ -36,11 +36,7 @@ export default function Home() {
       .catch((error) => console.error(error));
   }, []);
 
-  const images = [
-    "../../../images/mclaren.jpg",
-    "../../../images/porsche.jpg",
-    "../../../images/supra.jpg",
-  ];
+  const images = ["/mclaren.jpg", "/porsche.jpg", "/supra.jpg"];
 
   console.log(over_view);
 
